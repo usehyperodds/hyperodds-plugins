@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "hyperodds",
+  "displayName": "Hyperodds",
+  "version": "0.1.0",
+  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. Read-only, no key.",
+  "author": {
+    "name": "Hyperodds",
+    "email": "dev@usehyperodds.com",
+    "url": "https://usehyperodds.com"
+  },
+  "homepage": "https://usehyperodds.com/docs/mcp",
+  "repository": "https://github.com/usehyperodds/hyperodds-plugins",
+  "license": "MIT",
+  "keywords": ["hyperliquid", "hip-4", "outcome-markets", "prediction-markets", "mcp"],
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://usehyperodds.com/docs/mcp",
+  "supportUrl": "https://github.com/usehyperodds/hyperodds-plugins/issues",
+  "privacyPolicyUrl": "https://usehyperodds.com/privacy",
+  "termsOfServiceUrl": "https://usehyperodds.com/terms",
+  "mcpServers": {
+    "hyperodds": {
+      "type": "http",
+      "url": "https://api.usehyperodds.com/mcp"
+    }
+  }
+}

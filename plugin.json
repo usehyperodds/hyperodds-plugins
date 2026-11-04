@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "hyperodds",
+  "version": "0.1.0",
+  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. Read-only, no key.",
+  "author": { "name": "Hyperodds", "email": "dev@usehyperodds.com", "url": "https://usehyperodds.com" },
+  "homepage": "https://usehyperodds.com/docs/mcp",
+  "repository": "https://github.com/usehyperodds/hyperodds-plugins",
+  "license": "MIT",
+  "keywords": ["hyperliquid", "hip-4", "outcome-markets", "prediction-markets", "mcp"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Hyperodds",
+        "shortDescription": "Live, read-only data on Hyperliquid HIP-4 outcome markets",
+        "longDescription": "Read every HIP-4 outcome market on Hyperliquid, from every deployer: the book, the fair line with its sources, the edge after every fee, rule comparisons where several deployers list the same question, and the newest listings. Nothing can trade or see an account.",
+        "developerName": "Hyperodds",
+        "category": "Finance",
+        "capabilities": ["Read"],
+        "websiteURL": "https://usehyperodds.com",
+        "privacyPolicyURL": "https://usehyperodds.com/privacy",
+        "termsOfServiceURL": "https://usehyperodds.com/terms",
+        "defaultPrompt": [
+          "Which HIP-4 markets show the biggest edge after fees right now?",
+          "What was listed on HIP-4 in the last hour?"
+        ],
+        "brandColor": "#176646",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      }
+    }
+  }
+}

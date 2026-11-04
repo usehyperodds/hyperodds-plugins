@@ -1,1 +1,88 @@
-# hyperodds-plugins
+# Hyperodds plugins
+
+Live data on Hyperliquid's HIP-4 outcome markets, inside the agents you already use: markets from
+every deployer, fair lines with their sources, edges after fees, rule comparisons where several
+deployers list the same question, and the newest listings. Everything here reads from the free,
+read-only Hyperodds MCP server at `https://api.usehyperodds.com/mcp`. There is no key to set up,
+and nothing here can trade or see an account.
+
+## Claude Code, Codex and Gemini CLI
+
+This repository installs as a Claude Code plugin, a Codex plugin and a Gemini CLI extension. Each
+one connects the hosted Hyperodds MCP server and adds the `hip4-markets` skill, which tells the
+agent which tool answers which question and how to read the numbers.
+
+Claude Code:
+
+```sh
+claude plugin marketplace add usehyperodds/hyperodds-plugins
+claude plugin install hyperodds@hyperodds
+```
+
+Inside a session, `/plugin install hyperodds --marketplace usehyperodds/hyperodds-plugins` does
+both in one step.
+
+Codex:
+
+```sh
+codex plugin marketplace add usehyperodds/hyperodds-plugins
+codex plugin add hyperodds@hyperodds
+```
+
+Gemini CLI:
+
+```sh
+gemini extensions install https://github.com/usehyperodds/hyperodds-plugins
+```
+
+Start a new session and ask. `claude mcp list`, `codex mcp list` and `gemini mcp list` show the
+`hyperodds` server once it is installed.
+
+Cursor, VS Code, Claude Desktop and other MCP clients can connect to the same server directly; see
+[hyperodds-mcp](https://github.com/usehyperodds/hyperodds-mcp).
+
+## What to ask
+
+- "Which HIP-4 markets show the biggest edge after fees right now?"
+- "Is the next Fed decision priced the same on every deployer, and do their rules match?"
+- "Where does the fair line for the BTC markets settling today come from, and how far should I
+  trust it?"
+- "What was listed in the last hour?"
+
+## What gets installed
+
+| Host        | Manifest                                                        | MCP server                                     | Instructions                                   |
+| ----------- | --------------------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| Claude Code | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` | `mcpServers` in `plugin.json` (HTTP)           | `skills/hip4-markets/SKILL.md`                 |
+| Codex       | `plugin.json`, `.agents/plugins/marketplace.json`               | `mcp.json` (Streamable HTTP)                   | `skills/hip4-markets/SKILL.md`                 |
+| Gemini CLI  | `gemini-extension.json`                                         | `mcpServers` in the manifest (Streamable HTTP) | `GEMINI.md` and `skills/hip4-markets/SKILL.md` |
+
+The MCP server gives four tools, `odds_markets`, `odds_new`, `odds_fair` and `odds_cluster`. The
+[MCP guide](https://usehyperodds.com/docs/mcp) explains every field. Each IP address gets 1,000
+tool calls a day, reset at 00:00 UTC, and 5 requests a second.
+
+## Development
+
+You need Node.js 22 or later.
+
+```sh
+node --test
+npx @biomejs/biome@2.6.2 check .
+claude plugin validate .claude-plugin/plugin.json --strict
+gemini extensions validate .
+```
+
+The tests check that every manifest names the same server, version and skill, and that the Codex
+files follow the Agent Plugins 1.0.0 schemas. See [CONTRIBUTING.md](CONTRIBUTING.md) before
+opening a pull request.
+
+## Security
+
+Report vulnerabilities privately to security@usehyperodds.com, or through
+[the repository's Security tab](https://github.com/usehyperodds/hyperodds-plugins/security/advisories/new).
+[SECURITY.md](SECURITY.md) has the details.
+
+## License
+
+[MIT](LICENSE). Third-party names identify compatible clients and data sources; Hyperodds is not
+affiliated with any of them.

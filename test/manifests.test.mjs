@@ -1,0 +1,112 @@
+import assert from "node:assert/strict";
+import { access, readFile } from "node:fs/promises";
+import { test } from "node:test";
+
+const root = new URL("../", import.meta.url);
+const read = (path) => readFile(new URL(path, root), "utf8");
+const json = async (path) => JSON.parse(await read(path));
+
+const endpoint = "https://api.usehyperodds.com/mcp";
+const claude = await json(".claude-plugin/plugin.json");
+const claudeMarket = await json(".claude-plugin/marketplace.json");
+const portable = await json("plugin.json");
+const portableMcp = await json("mcp.json");
+const codexMarket = await json(".agents/plugins/marketplace.json");
+const gemini = await json("gemini-extension.json");
+
+test("every host sees the same name, version and description", () => {
+  for (const manifest of [claude, portable, gemini]) {
+    assert.equal(manifest.name, "hyperodds");
+    assert.equal(manifest.version, claude.version);
+    assert.equal(manifest.description, claude.description);
+  }
+  assert.equal(claudeMarket.plugins[0].description, claude.description);
+});
+
+test("every host registers the hosted server in its own transport format", () => {
+  assert.deepEqual(claude.mcpServers, { hyperodds: { type: "http", url: endpoint } });
+  assert.deepEqual(portableMcp.mcpServers, { hyperodds: { type: "streamable-http", url: endpoint } });
+  assert.equal(gemini.mcpServers.hyperodds.httpUrl, endpoint);
+  assert.equal(Object.keys(gemini.mcpServers).length, 1);
+});
+
+test("no .mcp.json at the root, so working inside this repository adds no project server", async () => {
+  await assert.rejects(access(new URL(".mcp.json", root)));
+});
+
+test("plugin.json follows the Agent Plugins 1.0.0 manifest schema", () => {
+  const allowed = [
+    "$schema",
+    "name",
+    "version",
+    "description",
+    "author",
+    "homepage",
+    "repository",
+    "license",
+    "keywords",
+    "extensions",
+  ];
+  assert.equal(portable.$schema, "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json");
+  assert.match(portable.name, /^(?!.*(?:--|\.\.))[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/);
+  assert.deepEqual(
+    Object.keys(portable).filter((key) => !allowed.includes(key)),
+    [],
+  );
+  assert.deepEqual(
+    Object.keys(portable.author).filter((key) => !["name", "email", "url"].includes(key)),
+    [],
+  );
+  for (const value of Object.values(portable.extensions)) assert.equal(typeof value, "object");
+});
+
+test("mcp.json follows the Agent Plugins 1.0.0 MCP schema", () => {
+  assert.equal(portableMcp.$schema, "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json");
+  assert.deepEqual(Object.keys(portableMcp).sort(), ["$schema", "mcpServers"]);
+  for (const server of Object.values(portableMcp.mcpServers)) {
+    assert.deepEqual(
+      Object.keys(server).filter((key) => !["type", "url", "headers"].includes(key)),
+      [],
+    );
+  }
+});
+
+test("the Claude Code marketplace lists this repository as the plugin", () => {
+  assert.equal(claudeMarket.name, "hyperodds");
+  assert.ok(claudeMarket.owner.name);
+  assert.ok(claudeMarket.description);
+  assert.deepEqual(
+    claudeMarket.plugins.map(({ name, source }) => [name, source]),
+    [["hyperodds", "./"]],
+  );
+});
+
+test("the Codex marketplace entry carries the policy and category Codex requires", () => {
+  assert.equal(codexMarket.name, "hyperodds");
+  assert.ok(codexMarket.interface.displayName);
+  const [entry] = codexMarket.plugins;
+  assert.equal(entry.name, "hyperodds");
+  assert.deepEqual(entry.source, { source: "local", path: "./" });
+  assert.equal(entry.policy.installation, "AVAILABLE");
+  assert.equal(entry.policy.authentication, "ON_INSTALL");
+  assert.ok(entry.category);
+});
+
+test("files the manifests point at exist", async () => {
+  const { interface: ui } = portable.extensions["com.openai"];
+  for (const path of [claude.icon, ui.composerIcon, ui.logo, gemini.contextFileName]) {
+    await access(new URL(path, root));
+  }
+});
+
+test("the shared skill has the frontmatter every host reads", async () => {
+  const skill = await read("skills/hip4-markets/SKILL.md");
+  const [, frontmatter] = skill.match(/^---\n([\s\S]*?)\n---\n/) ?? [];
+  assert.ok(frontmatter);
+  assert.match(frontmatter, /^name: hip4-markets$/m);
+  const [, description] = frontmatter.match(/^description: (.+)$/m);
+  assert.ok(description.length <= 1024);
+  for (const tool of ["odds_markets", "odds_new", "odds_fair", "odds_cluster"]) {
+    assert.match(skill, new RegExp(`\`${tool}\``));
+  }
+});

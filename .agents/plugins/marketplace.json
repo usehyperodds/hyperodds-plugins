@@ -1,0 +1,12 @@
+{
+  "name": "hyperodds",
+  "interface": { "displayName": "Hyperodds" },
+  "plugins": [
+    {
+      "name": "hyperodds",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Finance"
+    }
+  ]
+}

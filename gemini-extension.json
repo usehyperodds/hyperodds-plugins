@@ -1,0 +1,9 @@
+{
+  "name": "hyperodds",
+  "version": "0.1.0",
+  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. Read-only, no key.",
+  "mcpServers": {
+    "hyperodds": { "httpUrl": "https://api.usehyperodds.com/mcp", "timeout": 30000 }
+  },
+  "contextFileName": "GEMINI.md"
+}
