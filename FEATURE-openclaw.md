@@ -85,7 +85,7 @@ node openclaw/hyperodds/scripts/odds.mjs markets --sort edge --limit 3
 
 ## Assets
 
-`docs/bullish/openclaw/`, 1440×900, rendered from captured terminal output (light theme, IBM Plex
+`docs/feature/openclaw/`, 1440×900, rendered from captured terminal output (light theme, IBM Plex
 Mono). Paths show `~` for the home directory. The agent's diagnostic log lines and this Mac's Node
 notices are left out; the commands and answers are as printed.
 - `openclaw-answer.png`: the agent's answer to "Which HIP-4 markets show the biggest edge after
