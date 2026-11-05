@@ -44,7 +44,7 @@ Proof, every host installed here, each in a throwaway config directory:
   `codex plugin add hyperodds@hyperodds` installs 0.1.0 into the cache; `codex plugin list` shows
   `installed, enabled`; `codex mcp list` shows the `hyperodds` server enabled.
   `codex debug prompt-input` shows `hyperodds:hip4-markets` in the skills the model would see.
-  `docs/bullish/editor-plugins/codex-check.mjs` drives Codex's own app server: it lists the 4
+  `docs/feature/editor-plugins/codex-check.mjs` drives Codex's own app server: it lists the 4
   tools Codex discovered from the plugin's server and calls `odds_markets` through Codex's MCP
   client, returning live markets. No model turn: the throwaway home has no ChatGPT login.
 - **Gemini CLI 0.66.0** (`GEMINI_CLI_HOME` set to a fresh temporary directory):
@@ -95,7 +95,7 @@ for that reason.
 
 ## Assets
 
-`docs/bullish/editor-plugins/`, 1440×900, rendered from captured terminal output (light theme, IBM
+`docs/feature/editor-plugins/`, 1440×900, rendered from captured terminal output (light theme, IBM
 Plex Mono). Throwaway directories show as `$CODEX_HOME` and `$GEMINI_CLI_HOME`, the home directory
 as `~`.
 - `editor-claude-answer.png`: Claude Code answering "Which HIP-4 markets show the biggest edge
@@ -111,7 +111,7 @@ No recording: nothing here moves.
 
 ## What the operator must do
 
-1. Create the public repository and push `main` once both `bullish/openclaw` and this branch are
+1. Create the public repository and push `main` once both `feature/openclaw` and this branch are
    merged:
 
    ```sh
@@ -164,7 +164,7 @@ No recording: nothing here moves.
   which is correct for a keyless read-only server.
 - Hosts copy the whole repository root, so `docs/` (about 1 MB of screenshots after both branches
   merge) and `test/` ride along in each install.
-- Merging this branch after `bullish/openclaw` conflicts in `README.md` only: keep the OpenClaw
+- Merging this branch after `feature/openclaw` conflicts in `README.md` only: keep the OpenClaw
   section from that branch and the Claude Code, Codex and Gemini CLI sections from this one. The
   shared scaffold commit is identical on both branches.
 - The hosted server's limits apply: 1,000 tool calls a day per IP address and 5 requests a second.
