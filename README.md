@@ -2,9 +2,10 @@
 
 Live data on Hyperliquid's HIP-4 outcome markets, inside the agents you already use: markets from
 every deployer, fair lines with their sources, edges after fees, rule comparisons where several
-deployers list the same question, and the newest listings. Everything here reads from the free,
-read-only Hyperodds MCP server at `https://api.usehyperodds.com/mcp`. There is no key to set up,
-and nothing here can trade or see an account.
+deployers list the same question, and the newest listings. Everything here reads from the free
+Hyperodds MCP server at `https://api.usehyperodds.com/mcp`, which also takes forecasts for its public
+forecast record when you ask an agent to enter one. There is no key to set up, and no tool can trade
+or see an account.
 
 ## OpenClaw
 
@@ -31,6 +32,9 @@ tools when they are present:
 openclaw mcp add hyperodds --url https://api.usehyperodds.com/mcp --transport streamable-http
 ```
 
+The server's tools include `odds_forecast`, which enters a forecast in the public forecast record;
+the skill has the agent call it only when you ask.
+
 ## What to ask
 
 - "Which HIP-4 markets show the biggest edge after fees right now?"
@@ -42,8 +46,9 @@ openclaw mcp add hyperodds --url https://api.usehyperodds.com/mcp --transport st
 ## How it works
 
 Each command the agent runs is one HTTPS request to the hosted server, and the answer comes back as
-one line of JSON. The script keeps no state, needs no dependencies, and fails with a message that
-names the cause when a request errors or gets no answer within 30 seconds.
+one line of JSON. After the 5-a-second limit it waits and retries once. The script keeps no state,
+needs no dependencies, and fails with a message that names the cause when a request errors or gets
+no answer within 30 seconds. It exits 2 for a wrong command and 3 when the day's allowance is spent.
 
 | Command                       | Hosted tool    | Answers                                                                            |
 | ----------------------------- | -------------- | ---------------------------------------------------------------------------------- |
@@ -59,8 +64,8 @@ node openclaw/hyperodds/scripts/odds.mjs markets --sort edge --limit 5
 ```
 
 The [MCP guide](https://usehyperodds.com/docs/mcp) explains every field. Each IP address gets 1,000
-tool calls a day, reset at 00:00 UTC, and 5 requests a second. Set `HYPERODDS_MCP_URL` to read from
-another server.
+market tool calls a day, reset at 00:00 UTC, and 5 requests a second. Set `HYPERODDS_MCP_URL` to
+read from another server.
 
 ## Development
 
