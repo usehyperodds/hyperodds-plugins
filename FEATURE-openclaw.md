@@ -33,7 +33,8 @@ with a ClawHub account can publish a skill.
   tools shipped; rerun 22 Nov 2026) and agent turns call `hyperodds__odds_new`,
   `hyperodds__odds_fair` and `hyperodds__odds_markets` natively.
 - `clawhub skill publish ./openclaw/hyperodds --dry-run` resolves to `would-publish`, slug
-  `hyperodds`, version 1.0.0, 2 files. The slug `hyperodds` is unused on ClawHub today.
+  `hyperodds`, version 1.0.0, 2 files. The slug `hyperodds` was unused on ClawHub on 22 Nov 2026
+  (`clawhub inspect hyperodds` finds no skill).
 - Tests: `node --test` runs 34 tests offline (Node 24 locally, Node 22 via `npx node@22`): the
   script against a local mock MCP server (arguments, typed and range-checked integers, the `--q`
   length, lower-cased choices, tool errors, JSON-RPC errors with and without a message, the burst
