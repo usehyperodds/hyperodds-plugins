@@ -11,7 +11,8 @@ const commands = {
   cluster: { tool: "odds_cluster", flags: ["id", "outcome"] },
 };
 const integerFlags = new Set(["limit", "offset", "outcome"]);
-const ranges = { limit: [1, 100], offset: [0, 10_000] };
+const ranges = { limit: [1, 100], offset: [0, 10_000], outcome: [0, Number.MAX_SAFE_INTEGER] };
+const maxLength = { q: 100 };
 const choices = {
   sort: ["volume", "edge", "new", "settling"],
   category: ["sports", "crypto", "equities", "commodities", "indices", "macro", "ipo", "awards", "other"],
@@ -24,23 +25,25 @@ try {
   server = null;
 }
 const origin = server?.origin ?? "an invalid HYPERODDS_MCP_URL";
+const shown = server ? `${server.origin}${server.pathname}` : origin;
 
 const usage = `Usage: node odds.mjs <command> [options]
 
 Commands:
   markets             Markets from every deployer, most traded first
                       --sort volume|edge|new|settling  --category <name>  --deployer <code>
-                      --q <text>  --limit <1-100>  --offset <0-10000>
+                      --q <text, up to 100 characters>  --limit <1-100>  --offset <0-10000>
   new                 Newest listings first
                       --category <name>  --limit <1-100>  --offset <0-10000>
   fair <outcome>      One market's fair line, its sources, the book and the edge each way
-  cluster <outcome>   One question across deployers: rule grades, differences, merged book
+  cluster <outcome>   One question listed by two or more deployers: rule grades, differences, merged book
                       (or --id <cluster id>, not both)
 
 Categories: ${choices.category.join(", ")}.
 Prints the result as one line of JSON. Read-only; no key needed.
 Exit codes: 0 done, 1 failed, 2 wrong command, 3 daily allowance spent until 00:00 UTC.
-Server: ${origin} (set HYPERODDS_MCP_URL to change it)`;
+Server: ${shown}
+  Set HYPERODDS_MCP_URL to change it. The script reads servers that answer plain JSON only.`;
 
 class UsageError extends Error {}
 class DailyLimitError extends Error {}
@@ -77,6 +80,8 @@ function parse(argv) {
         throw new UsageError(`--${key} must be one of ${choices[key].join(", ")}, not "${value}"`);
       }
       args[key] = choice;
+    } else if (Object.hasOwn(maxLength, key) && value.length > maxLength[key]) {
+      throw new UsageError(`--${key} can be at most ${maxLength[key]} characters, not ${value.length}`);
     } else {
       args[key] = value;
     }
@@ -93,11 +98,11 @@ function parse(argv) {
 }
 
 function integer(key, value, label = `--${key}`) {
-  const n = /^\d+$/.test(value) ? Number(value) : Number.NaN;
-  if (!Number.isSafeInteger(n)) throw new UsageError(`${label} must be a whole number, not "${value}"`);
-  const range = ranges[key];
-  if (range && (n < range[0] || n > range[1])) {
-    throw new UsageError(`${label} must be from ${range[0]} to ${range[1]}, not ${n}`);
+  if (!/^\d+$/.test(value)) throw new UsageError(`${label} must be a whole number, not "${value}"`);
+  const n = Number(value);
+  const [lo, hi] = ranges[key];
+  if (!Number.isSafeInteger(n) || n < lo || n > hi) {
+    throw new UsageError(`${label} ${value} is out of range: use ${lo} to ${hi}`);
   }
   return n;
 }
@@ -143,24 +148,26 @@ async function call(tool, args, retried = false) {
     message = undefined;
   }
 
-  if (message?.error) {
-    const { code, message: reason, data } = message.error;
+  const rpcError = Number.isInteger(message?.error?.code) ? message.error : undefined;
+  if (rpcError) {
+    const { code, message: reason, data } = rpcError;
     if (code === BURST_LIMIT && !retried) {
       const header = response.headers.get("retry-after");
       const wait = header === null ? 1 : Number(header);
-      await sleep((Number.isFinite(wait) && wait >= 0 ? Math.min(wait, 2) : 1) * 1000);
+      const seconds = Number.isFinite(wait) && wait >= 0 ? Math.min(wait, 2) : 1;
+      await sleep(seconds * 1000 + Math.random() * 500);
       return call(tool, args, true);
     }
     if (code === DAILY_LIMIT) {
       const reset = data?.resetAt ? ` Next reset: ${data.resetAt}.` : "";
       throw new DailyLimitError(`${reason ?? "Daily limit reached."}${reset}`);
     }
-    throw new Error(reason || `${origin} answered JSON-RPC error ${code}`);
+    throw new Error(reason || `Hyperodds answered JSON-RPC error ${code}`);
   }
   if (response.status === 429) throw new Error("rate limited: wait a second, then try again");
-  if (!response.ok) throw new Error(`${origin} answered HTTP ${response.status} (${type})`);
+  if (!response.ok) throw new Error(`Hyperodds answered HTTP ${response.status}`);
   if (!message?.result) {
-    throw new Error(`${origin} answered HTTP ${response.status} with ${type}, not a JSON-RPC result`);
+    throw new Error(`Hyperodds answered HTTP ${response.status} with ${type}, not a JSON-RPC result`);
   }
 
   const { result } = message;

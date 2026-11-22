@@ -2,8 +2,6 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { access, readFile, rm } from "node:fs/promises";
 import { createServer } from "node:http";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { after, before, beforeEach, test } from "node:test";
 import { fileURLToPath } from "node:url";
 
@@ -187,7 +185,7 @@ test("a JSON-RPC error names the server's reason, or its code when there is none
   reply = (message) => rpcError(message.id, { code: -32602, message: "Invalid params." });
   assert.equal((await run(["markets"])).stderr.trim(), "hyperodds: Invalid params.");
   reply = (message) => rpcError(message.id, { code: -32603 });
-  assert.match((await run(["markets"])).stderr, /answered JSON-RPC error -32603/);
+  assert.match((await run(["markets"])).stderr, /Hyperodds answered JSON-RPC error -32603/);
 });
 
 test("a rate limit without a body asks the caller to wait", async () => {
@@ -197,16 +195,26 @@ test("a rate limit without a body asks the caller to wait", async () => {
   assert.match(stderr, /rate limited/);
 });
 
-test("an HTTP error page is reported by status and content type", async () => {
+test("an HTTP error page is reported by status", async () => {
   reply = () => ({ status: 502, type: "text/html", text: "<html>bad gateway</html>" });
   const { code, stderr } = await run(["markets"]);
   assert.equal(code, 1);
-  assert.match(stderr, /answered HTTP 502 \(text\/html\)/);
+  assert.equal(stderr.trim(), "hyperodds: Hyperodds answered HTTP 502");
+});
+
+test("a JSON error body that is not JSON-RPC is reported by status", async () => {
+  reply = () => ({ status: 404, text: '{"error":"not found"}' });
+  const { code, stderr } = await run(["markets"]);
+  assert.equal(code, 1);
+  assert.equal(stderr.trim(), "hyperodds: Hyperodds answered HTTP 404");
 });
 
 test("a 200 that is not JSON-RPC names what came back", async () => {
   reply = () => ({ type: "text/html; charset=utf-8", text: "<html>login</html>" });
-  assert.match((await run(["markets"])).stderr, /answered HTTP 200 with text\/html, not a JSON-RPC result/);
+  assert.match(
+    (await run(["markets"])).stderr,
+    /Hyperodds answered HTTP 200 with text\/html, not a JSON-RPC result/,
+  );
   reply = () => ({ type: null, text: "" });
   assert.match((await run(["markets"])).stderr, /with no content type, not a JSON-RPC result/);
 });
@@ -256,15 +264,16 @@ test("bad usage exits 2 without calling the server", async () => {
     [["markets", "--outcome", "1"], /"markets" takes no --outcome/],
     [["markets", "--limit"], /--limit needs a value/],
     [["markets", "--limit", "ten"], /--limit must be a whole number/],
-    [["markets", "--limit", "0"], /--limit must be from 1 to 100, not 0/],
-    [["markets", "--limit", "101"], /--limit must be from 1 to 100, not 101/],
-    [["markets", "--offset", "10001"], /--offset must be from 0 to 10000/],
+    [["markets", "--limit", "0"], /--limit 0 is out of range: use 1 to 100/],
+    [["markets", "--limit", "101"], /--limit 101 is out of range: use 1 to 100/],
+    [["markets", "--offset", "10001"], /--offset 10001 is out of range: use 0 to 10000/],
+    [["markets", "--q", "x".repeat(101)], /--q can be at most 100 characters, not 101/],
     [["markets", "--category", "cars"], /--category must be one of sports, crypto/],
     [["markets", "--sort", "best"], /--sort must be one of volume, edge, new, settling/],
     [["markets", "extra"], /unexpected argument "extra"/],
     [["fair"], /fair needs an outcome id/],
     [["fair", "abc"], /outcome must be a whole number/],
-    [["fair", "99999999999999999999"], /outcome must be a whole number/],
+    [["fair", "99999999999999999999"], /outcome 99999999999999999999 is out of range/],
     [["fair", "1", "2"], /unexpected argument "2"/],
     [["cluster"], /cluster needs an outcome id or --id/],
     [["cluster", "8572", "--id", "x"], /an outcome id or --id, not both/],
@@ -277,17 +286,26 @@ test("bad usage exits 2 without calling the server", async () => {
   assert.equal(requests.length, 0);
 });
 
-test("--help prints usage with the server's origin and exits 0", async () => {
+test("--help prints usage with the server's full URL and exits 0", async () => {
   const { code, stdout } = await run(["--help"]);
   assert.equal(code, 0);
   assert.match(stdout, /Usage: node odds\.mjs <command>/);
-  assert.match(stdout, new RegExp(`Server: ${new URL(url).origin.replaceAll(".", "\\.")} `));
+  assert.match(stdout, /--q <text, up to 100 characters>/);
+  assert.ok(stdout.includes(`Server: ${url}\n`), stdout);
+  assert.match(stdout, /plain JSON only/);
+});
+
+test("a query of exactly 100 characters is sent", async () => {
+  const { code } = await run(["markets", "--q", "x".repeat(100)]);
+  assert.equal(code, 0);
+  assert.equal(requests[0].body.params.arguments.q.length, 100);
 });
 
 test("user text quoted as SKILL.md says never reaches a shell", {
   skip: process.platform === "win32" && "needs a POSIX shell",
 }, async () => {
-  const marker = join(tmpdir(), `hyperodds-injection-${process.pid}`);
+  // A short path keeps the text inside the 100-character limit on --q.
+  const marker = `/tmp/ho-inj-${process.pid}`;
   const typed = `fed $(touch ${marker}) \`touch ${marker}\` it's`;
   const quoted = `'${typed.replaceAll("'", "")}'`;
   const command = (q) => `"${process.execPath}" "${script}" markets --q ${q}`;
