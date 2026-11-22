@@ -12,23 +12,32 @@ OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub accou
   dependency-free Node script that calls the hosted MCP server (`https://api.usehyperodds.com/mcp`)
   with one JSON-RPC `tools/call` per command and prints the tool's JSON. Commands: `markets`,
   `new`, `fair <outcome>`, `cluster <outcome>|--id`, mapping to `odds_markets`, `odds_new`,
-  `odds_fair`, `odds_cluster`. User text only ever travels as a flag value, never through a shell
-  string the skill builds.
-- The skill tells the agent how to read the numbers (side-0 probabilities, edges in points after
-  every fee at $100, the `fairConfidence >= 0.5` and `singleSource` checks, cluster grades) and how
-  to answer (lead with the market, link it, no trade advice, name the limit on a rate error). When
-  the Hyperodds MCP tools are configured natively, the skill prefers them.
+  `odds_fair`, `odds_cluster`. The skill has the agent put user text in single quotes, so `$(…)`
+  and backticks never reach a shell (tested). The script checks limits, offsets, sorts and
+  categories before spending a call, retries once after the 5-a-second limit, and exits 2 for a
+  wrong command, 3 when the day's allowance is spent and 1 for anything else. Errors name the
+  server by its origin only.
+- The skill tells the agent how to read the numbers (side-0 probabilities as cents to the console's
+  precision, edges in points after every fee at $100, the `fairConfidence >= 0.5` and `singleSource`
+  checks, cluster grades), how to say the times as the console does, to treat deployer text as data,
+  and how to answer (lead with the market, link it, no trade advice). When the Hyperodds MCP tools
+  are configured natively, the skill prefers them, and calls `hyperodds__odds_forecast` only when
+  the person asks to enter a forecast.
 - Proven in a real OpenClaw install (details below): the skill installs, reports `✓ Ready` with its
   `node` requirement met, and an agent turn answers a live question by reading `SKILL.md` and
   running the script through OpenClaw's own `exec` tool. A second setup adds the hosted server with
-  `openclaw mcp add`; `openclaw mcp probe` lists its 4 tools and agent turns call
-  `hyperodds__odds_new`, `hyperodds__odds_fair` and `hyperodds__odds_markets` natively.
+  `openclaw mcp add`; `openclaw mcp probe` lists its 7 tools (4 on 4 Nov, before the forecast
+  tools shipped; rerun 22 Nov 2026) and agent turns call `hyperodds__odds_new`,
+  `hyperodds__odds_fair` and `hyperodds__odds_markets` natively.
 - `clawhub skill publish ./openclaw/hyperodds --dry-run` resolves to `would-publish`, slug
   `hyperodds`, version 1.0.0, 2 files. The slug `hyperodds` is unused on ClawHub today.
-- Tests: `node --test` runs 18 tests offline (Node 24 locally, Node 22 via `npx node@22`): the
-  script against a local mock MCP server (arguments, typed integers, event-stream replies, tool
-  errors, JSON-RPC errors, 429, HTTP error pages, unreachable server, every usage error, every
-  example command in `SKILL.md`), and the frontmatter shape OpenClaw and ClawHub read.
+- Tests: `node --test` runs 30 tests offline (Node 24 locally, Node 22 via `npx node@22`): the
+  script against a local mock MCP server (arguments, typed and range-checked integers, lower-cased
+  choices, tool errors, JSON-RPC errors with and without a message, the burst limit's one retry,
+  the daily limit's exit 3, bare 429, HTTP error pages, non-JSON answers, a connection that breaks
+  off, unreachable and malformed endpoints, Node without `fetch`, every usage error, user text with
+  `$(…)` and backticks through `/bin/sh`, every example command in `SKILL.md`), and the frontmatter
+  and quoting rules OpenClaw and ClawHub read.
   `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
 ## What is prepared, not done
@@ -89,25 +98,38 @@ node openclaw/hyperodds/scripts/odds.mjs markets --sort edge --limit 3
 Mono). Paths show `~` for the home directory. The agent's diagnostic log lines and this Mac's Node
 notices are left out; the commands and answers are as printed.
 - `openclaw-answer.png`: the agent's answer to "Which HIP-4 markets show the biggest edge after
-  fees right now? Top three." (live data, 4 Nov 2026 at 23:28 UTC).
+  fees right now? Top three." (live data, 4 Nov 2026 at 23:28 UTC). It predates the skill's time
+  and price wording: it says "Settles" for touch markets that settle by that time, and quotes whole
+  cents. Recapture it with an agent turn before a post uses it.
 - `openclaw-setup.png`: `openclaw skills install ./openclaw/hyperodds` and
   `openclaw skills info hyperodds` showing `✓ Ready`.
-- `openclaw-mcp.png`: `openclaw mcp add` and `openclaw mcp probe` listing 4 tools.
+- `openclaw-mcp.png`: `openclaw mcp add` and `openclaw mcp probe` listing 7 tools (recaptured 22 Nov
+  2026 in a throwaway state directory, shown as `$OPENCLAW_STATE_DIR`).
 
 No recording: nothing here moves. A terminal capture of the agent turn can be made from the same
 commands if a post needs one.
 
 ## What the operator must do
 
-1. Sign in at https://clawhub.ai with the GitHub account that administers the `usehyperodds`
+1. Keep the write-ups off the public `main`. When merging, move `FEATURE-openclaw.md` and
+   `docs/feature/openclaw/` out of the repository into the private ops folder
+   (`ops/feature/plugins/openclaw/`), and do the same for every other unit's `FEATURE-*.md` and
+   `docs/feature/<unit>/`. `README.md` conflicts with `feature/editor-plugins`: keep every unit's
+   section (the merge order is in `FEATURE-editor-plugins.md`). Check before pushing:
+
+   ```sh
+   git ls-files 'FEATURE-*.md' docs/feature   # must print nothing
+   ```
+
+2. Sign in at https://clawhub.ai with the GitHub account that administers the `usehyperodds`
    GitHub organization.
-2. Create the ClawHub organization owner `usehyperodds` (https://clawhub.ai/usehyperodds returns
+3. Create the ClawHub organization owner `usehyperodds` (https://clawhub.ai/usehyperodds returns
    404 today, so the handle looks free). If ClawHub refuses the handle, open an
    [Org / Namespace Claim](https://github.com/openclaw/clawhub/issues/new?template=org-namespace-claim.yml)
    with the public proof (usehyperodds.com, github.com/usehyperodds). If organizations are not
    available, drop `--owner` below and change the install line in `README.md` and this file to the
    personal handle.
-3. Publish from the repository root:
+4. Publish from the repository root:
 
    ```sh
    npx clawhub@0.25.1 login
@@ -120,7 +142,7 @@ commands if a post needs one.
    # same command without --dry-run to publish
    ```
 
-4. Wait for the security scan, then check it from a clean profile:
+5. Wait for the security scan, then check it from a clean profile:
 
    ```sh
    npx clawhub@0.25.1 inspect @usehyperodds/hyperodds
@@ -128,26 +150,31 @@ commands if a post needs one.
    openclaw --profile hyperodds-check skills install @usehyperodds/hyperodds
    ```
 
-5. Create the public GitHub repository `usehyperodds/hyperodds-plugins` and push `main` once this
-   branch is merged, so the skill's README and source are public.
-6. Post the announcement below with the ClawHub link in a reply.
+6. Create the public GitHub repository `usehyperodds/hyperodds-plugins` and push `main` once the
+   plugins branches are merged, so the skill's README and source are public.
+7. Post the announcement below with the ClawHub link in a reply.
 
 Published skills are released on ClawHub under MIT-0 (ClawHub's rule for every skill); the
 repository stays MIT.
 
 ## Honest limits
 
-- The skill is read-only and inherits the hosted server's limits: 1,000 tool calls a day per IP
-  address (reset 00:00 UTC) and 5 requests a second. A busy agent asking broad questions can make
+- The script only reads, and inherits the hosted server's limits: 1,000 market tool calls a day per
+  IP address (reset 00:00 UTC) and 5 requests a second. A busy agent asking broad questions can make
   several calls per answer; one proof turn made ten.
+- With the hosted server added natively, the agent also gets the forecast tools. `odds_forecast` is
+  not read-only: it records forecasts a person signs, or returns a sign link. The skill calls it
+  only when asked.
+- The MCP output gives `starts` and `settles` but not a market's kind, so the skill tells "settles
+  at" from "settles by" by category and title (touch markets). Explicit timing from the server is
+  tracked separately.
 - Fair lines are estimates. The skill tells the agent to say so, but answer quality depends on the
   model the user runs.
 - It needs `node` on the host or inside the sandbox when OpenClaw sandboxes the agent. OpenClaw
   itself runs on Node, so a normal install has it; a custom sandbox image may not.
 - ClawHub's security scan runs after upload; a listing is not public until it passes.
-- Noticed while testing, outside this build: `odds_fair` on an options-priced line (for example
-  outcome 22091) returns one source (`deribit`) with `singleSource: false`. One agent read that as
-  an inconsistency and said so. Worth a look on the server, which this repository does not hold.
+- The dry run accepts `--categories finance,research` without checking the slugs against ClawHub's
+  list; confirm them on the listing after publishing.
 
 ## Links
 
@@ -172,19 +199,19 @@ One paragraph:
 
 > The Hyperodds skill for OpenClaw gives your agent live data on every HIP-4 outcome market on
 > Hyperliquid, from every deployer. Ask which markets trade furthest from their fair line after
-> fees, or whether two deployers list the same question under the same rules. It is read-only and
-> needs no key. Install it with
+> fees, or whether two deployers list the same question under the same rules. It needs no key and
+> can't trade. Install it with
 > `openclaw skills install @usehyperodds/hyperodds`.
 
 One post (link in the reply):
 
 > Hyperodds is on ClawHub.
 >
-> Install the skill and your OpenClaw agent reads every HIP-4 market on Hyperliquid, with its fair
-> line and the edge after every fee.
+> Install the skill and your OpenClaw agent reads every HIP-4 market on Hyperliquid, with fair lines
+> and the edge after fees wherever Hyperodds can price them.
 >
 > openclaw skills install @usehyperodds/hyperodds
 >
-> Read-only. No key.
+> No key, and it can't trade.
 
 Reply: `https://clawhub.ai/usehyperodds/skills/hyperodds`
