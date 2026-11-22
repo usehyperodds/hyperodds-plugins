@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "hyperodds",
   "version": "0.1.0",
-  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. Read-only, no key.",
+  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. No key needed, and no tool can trade or see an account.",
   "author": { "name": "Hyperodds", "email": "dev@usehyperodds.com", "url": "https://usehyperodds.com" },
   "homepage": "https://usehyperodds.com/docs/mcp",
   "repository": "https://github.com/usehyperodds/hyperodds-plugins",
@@ -12,11 +12,11 @@
     "com.openai": {
       "interface": {
         "displayName": "Hyperodds",
-        "shortDescription": "Live, read-only data on Hyperliquid HIP-4 outcome markets",
-        "longDescription": "Read every HIP-4 outcome market on Hyperliquid, from every deployer: the book, the fair line with its sources, the edge after every fee, rule comparisons where several deployers list the same question, and the newest listings. Nothing can trade or see an account.",
+        "shortDescription": "Live data on Hyperliquid HIP-4 outcome markets",
+        "longDescription": "Read every HIP-4 outcome market on Hyperliquid, from every deployer: the book, the fair line with its sources, the edge after every fee, rule comparisons where several deployers list the same question, and the newest listings. Agents can also enter forecasts in the public forecast record when asked. No key needed, and no tool can trade or see an account.",
         "developerName": "Hyperodds",
         "category": "Finance",
-        "capabilities": ["Read"],
+        "capabilities": ["Read", "Write"],
         "websiteURL": "https://usehyperodds.com",
         "privacyPolicyURL": "https://usehyperodds.com/privacy",
         "termsOfServiceURL": "https://usehyperodds.com/terms",

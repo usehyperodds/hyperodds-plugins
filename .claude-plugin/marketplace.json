@@ -1,13 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "hyperodds",
-  "description": "Hyperodds plugins: live, read-only data on Hyperliquid HIP-4 outcome markets.",
+  "description": "Hyperodds plugins: live data on Hyperliquid HIP-4 outcome markets.",
   "owner": { "name": "Hyperodds", "email": "dev@usehyperodds.com", "url": "https://usehyperodds.com" },
   "plugins": [
     {
       "name": "hyperodds",
       "source": "./",
-      "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. Read-only, no key.",
+      "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. No key needed, and no tool can trade or see an account.",
       "category": "finance",
       "tags": ["hyperliquid", "hip-4", "outcome-markets", "prediction-markets"]
     }

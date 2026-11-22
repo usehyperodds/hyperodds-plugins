@@ -2,9 +2,10 @@
 
 Live data on Hyperliquid's HIP-4 outcome markets, inside the agents you already use: markets from
 every deployer, fair lines with their sources, edges after fees, rule comparisons where several
-deployers list the same question, and the newest listings. Everything here reads from the free,
-read-only Hyperodds MCP server at `https://api.usehyperodds.com/mcp`. There is no key to set up,
-and nothing here can trade or see an account.
+deployers list the same question, and the newest listings. Everything here reads from the free
+Hyperodds MCP server at `https://api.usehyperodds.com/mcp`, which also takes forecasts for its public
+forecast record when you ask an agent to enter one. There is no key to set up, and no tool can trade
+or see an account.
 
 ## Claude Code, Codex and Gemini CLI
 
@@ -57,9 +58,12 @@ Cursor, VS Code, Claude Desktop and other MCP clients can connect to the same se
 | Codex       | `plugin.json`, `.agents/plugins/marketplace.json`               | `mcp.json` (Streamable HTTP)                   | `skills/hip4-markets/SKILL.md`                 |
 | Gemini CLI  | `gemini-extension.json`                                         | `mcpServers` in the manifest (Streamable HTTP) | `GEMINI.md` and `skills/hip4-markets/SKILL.md` |
 
-The MCP server gives four tools, `odds_markets`, `odds_new`, `odds_fair` and `odds_cluster`. The
+The MCP server gives seven tools. `odds_markets`, `odds_new`, `odds_fair` and `odds_cluster` read
+markets; `odds_forecast`, `odds_forecast_record` and `odds_leaderboard` enter and read the public
+forecast record, and the skill tells the agent to enter a forecast only when you ask. The
 [MCP guide](https://usehyperodds.com/docs/mcp) explains every field. Each IP address gets 1,000
-tool calls a day, reset at 00:00 UTC, and 5 requests a second.
+market tool calls a day, reset at 00:00 UTC, and the forecast tools don't count toward it. Every
+request also counts toward 5 a second.
 
 ## Development
 
