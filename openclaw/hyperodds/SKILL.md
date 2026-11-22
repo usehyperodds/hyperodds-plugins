@@ -69,14 +69,17 @@ arguments instead of running the script. The server's forecast tools come with t
 - `bid`, `ask` and `fair` are probabilities from 0 to 1 for side 0, the first label in `sides`
   (usually Yes). Quote them as cents, as the Hyperodds Console does, and keep trailing zeros:
   - from 1¢ to 99¢, one decimal: 0.542 is 54.2¢;
-  - below 1¢ or above 99¢, two decimals: 0.004 is 0.40¢ and 0.009 is 0.90¢, never 0.4¢ or 0.9¢;
-  - below 0.1¢ or above 99.9¢, three decimals: 0.0006 is 0.060¢;
-  - when a bid and an ask would print the same at one decimal, give both the fewest decimals, up
-    to three, that tell them apart: 0.9991 and 0.99948 are 99.91¢ and 99.95¢, and 0.03 and 0.03001
-    are 3.000¢ and 3.001¢.
+  - from 0.1¢ to 1¢ and from 99¢ to 99.9¢, two decimals: 0.004 is 0.40¢, 0.009 is 0.90¢ and
+    0.0011 is 0.11¢, never 0.4¢, 0.9¢ or 0.110¢;
+  - below 0.1¢ or above 99.9¢, three decimals: 0.0006 is 0.060¢ and 0.0007 is 0.070¢;
+  - a bid and an ask that already differ at one decimal keep their own decimals: 0.01734 and
+    0.01832 are 1.7¢ and 1.8¢;
+  - only when they match at one decimal, give both the fewest decimals, up to three, that tell them
+    apart: 0.9991 and 0.99948 are 99.91¢ and 99.95¢, and 0.03 and 0.03001 are 3.000¢ and 3.001¢.
 - Prices move. Quote `asOf` (UTC) when the tool gives one, and say the prices are as of then.
 - `edgePts` is the best buy edge in percentage points after every fee, including the fee
-  Hyperliquid takes at settlement, for a $100 order. 2.9 means 2.9¢ a share; quote it as +2.9 pts.
+  Hyperliquid takes at settlement, for a $100 order. 2.9 means 2.9¢ a share. Quote edges in points
+  to one decimal: 2.58 is +2.6 pts.
   `edgeSide` is the index of that side in `sides`. The edge is null when there is no fair line or
   $100 would not fill.
 - `fair` adds `edge.buy0`, `buy1`, `sell0` and `sell1`: the edge for each way to trade at
