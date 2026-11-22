@@ -55,11 +55,12 @@ Proof, every host installed here, each in a throwaway config directory:
   `hyperodds ... Connected` in a trusted folder. No model turn: there is no Gemini login or key.
 - The user configurations on this Mac (`~/.claude`, `~/.codex/config.toml`, `~/.gemini`) carry no
   trace of these installs (checked after the runs).
-- Tests: `node --test` runs 11 manifest tests (same name, version and description everywhere;
+- Tests: `node --test` runs 13 manifest tests (same name, version and description everywhere;
   the same endpoint in each host's transport format; the Agent Plugins schema rules for
   `plugin.json` and `mcp.json`; both marketplace files; referenced files exist; no root
   `.mcp.json`; the skill's frontmatter; all seven server tools named in the skill and `GEMINI.md`;
-  no manifest calling the plugin read-only, and Codex's `Write` capability).
+  no manifest calling the plugin read-only, and Codex's `Write` capability; the skill's price
+  examples checked against the console's own formatting; the answer rules).
   `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
 ## What is prepared, not done
@@ -176,9 +177,10 @@ No recording: nothing here moves.
   workspaces. Skills ask for consent the first time they activate. Both are Gemini's design.
 - `codex mcp list` prints `Auth: Unsupported` for the server. It means the server offers no OAuth,
   which is correct for a keyless server.
-- Hosts copy the whole repository root, so `test/` and every other unit's folder (`excel/`,
-  `openclaw/`, `raycast/`, `shortcuts/`, `snap/`, about 1 MB together) ride along in each install;
-  Codex also copies `.git`. The write-ups and screenshots stay off the public `main` (step 1).
+- Every host copies the whole repository into its install, `.git` included, so `test/` and every
+  other unit's folder (`excel/`, `openclaw/`, `raycast/`, `shortcuts/`, `snap/`, about 1 MB
+  together) ride along. The write-ups and screenshots still move to the ops folder at merge
+  (step 1), so they never ship.
 - Six branches share this repository and an identical scaffold commit: `feature/editor-plugins`,
   `feature/openclaw`, `feature/excel`, `feature/metamask-snap`, `feature/raycast` and
   `feature/siri`. Merged in that order (checked in a scratch clone), this branch merges cleanly,
@@ -217,9 +219,9 @@ One paragraph:
 
 > Hyperodds plugins put live HIP-4 market data inside Claude Code, Codex and Gemini CLI. The
 > plugin connects the Hyperodds MCP server and adds a skill that teaches the agent to read fair
-> lines and edges after fees. Ask which markets trade furthest from their fair line, or whether two
-> deployers list the same question under the same rules. It needs no key, and no tool can trade or
-> see an account.
+> lines and edges after fees. Ask which markets trade furthest from their fair line, or, when two
+> or more deployers list the same question, whether their rules match. It needs no key, and no tool
+> can trade or see an account.
 
 One post (link in the reply):
 
