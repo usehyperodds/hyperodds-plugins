@@ -7,6 +7,15 @@ const read = (path) => readFile(new URL(path, root), "utf8");
 const json = async (path) => JSON.parse(await read(path));
 
 const endpoint = "https://api.usehyperodds.com/mcp";
+const tools = [
+  "odds_markets",
+  "odds_new",
+  "odds_fair",
+  "odds_cluster",
+  "odds_forecast",
+  "odds_forecast_record",
+  "odds_leaderboard",
+];
 const claude = await json(".claude-plugin/plugin.json");
 const claudeMarket = await json(".claude-plugin/marketplace.json");
 const portable = await json("plugin.json");
@@ -106,7 +115,18 @@ test("the shared skill has the frontmatter every host reads", async () => {
   assert.match(frontmatter, /^name: hip4-markets$/m);
   const [, description] = frontmatter.match(/^description: (.+)$/m);
   assert.ok(description.length <= 1024);
-  for (const tool of ["odds_markets", "odds_new", "odds_fair", "odds_cluster"]) {
-    assert.match(skill, new RegExp(`\`${tool}\``));
+});
+
+test("the skill and the Gemini context name every tool the server gives", async () => {
+  for (const path of ["skills/hip4-markets/SKILL.md", "GEMINI.md"]) {
+    const text = await read(path);
+    for (const tool of tools) assert.match(text, new RegExp(`\`${tool}\``), `${path} names ${tool}`);
   }
+});
+
+test("odds_forecast writes, so no manifest calls the plugin read-only", () => {
+  for (const manifest of [claude, claudeMarket, portable, gemini]) {
+    assert.doesNotMatch(JSON.stringify(manifest), /read-only/i);
+  }
+  assert.ok(portable.extensions["com.openai"].interface.capabilities.includes("Write"));
 });
