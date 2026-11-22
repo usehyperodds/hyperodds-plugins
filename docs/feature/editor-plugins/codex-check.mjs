@@ -7,8 +7,20 @@ const codex = spawn("codex", ["app-server"], { stdio: ["pipe", "pipe", "ignore"]
 const waiting = new Map();
 let nextId = 1;
 
+codex.on("error", (error) => {
+  console.error(
+    error.code === "ENOENT" ? "codex is not on PATH; install Codex CLI first" : `codex: ${error.message}`,
+  );
+  process.exit(1);
+});
+
 createInterface({ input: codex.stdout }).on("line", (line) => {
-  const message = JSON.parse(line);
+  let message;
+  try {
+    message = JSON.parse(line);
+  } catch {
+    return;
+  }
   waiting.get(message.id)?.(message);
   waiting.delete(message.id);
 });
@@ -46,10 +58,13 @@ try {
     threadId: thread.id,
     arguments: { sort: "edge", limit: 3 },
   });
-  const { total, markets } = result.structuredContent ?? JSON.parse(result.content[0].text);
+  const text = result.content?.find((part) => part.type === "text")?.text;
+  if (result.isError) throw new Error(`odds_markets failed: ${text ?? "no message"}`);
+  const { total, markets } = result.structuredContent ?? JSON.parse(text);
   console.log(`call     odds_markets {"sort":"edge","limit":3} -> ${markets.length} of ${total} markets`);
   for (const m of markets) {
-    console.log(`         ${m.title} (${m.deployerName}): edge ${m.edgePts} pts on ${m.sides[m.edgeSide]}`);
+    const edge = m.edgePts === null ? "no edge" : `edge ${m.edgePts} pts on ${m.sides[m.edgeSide]}`;
+    console.log(`         ${m.title} (${m.deployerName}): ${edge}`);
   }
 } catch (error) {
   console.error(error.message);
