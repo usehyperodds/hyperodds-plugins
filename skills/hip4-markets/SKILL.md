@@ -1,6 +1,6 @@
 ---
 name: hip4-markets
-description: Read Hyperliquid HIP-4 outcome markets with the Hyperodds MCP tools. Use when someone asks about HIP-4 or Hyperliquid prediction markets, what a market trades at, fair lines, edges after fees, deployers, rules, new listings or the Hyperodds forecast record.
+description: Read Hyperliquid HIP-4 outcome markets with the Hyperodds MCP tools, and word prices, times and edges as the Hyperodds Console does. Load it before calling any hyperodds tool (odds_markets, odds_new, odds_fair, odds_cluster, odds_forecast, odds_forecast_record, odds_leaderboard), and whenever someone asks about HIP-4 or Hyperliquid prediction or outcome markets, what a market trades at, fair lines, edges after fees, deployers, rules, new listings or the Hyperodds forecast record.
 ---
 
 # Reading HIP-4 markets
