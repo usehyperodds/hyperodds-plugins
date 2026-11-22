@@ -20,8 +20,8 @@ claude plugin marketplace add usehyperodds/hyperodds-plugins
 claude plugin install hyperodds@hyperodds
 ```
 
-Inside a session, `/plugin install hyperodds --marketplace usehyperodds/hyperodds-plugins` does
-both in one step.
+`claude plugin install hyperodds --marketplace usehyperodds/hyperodds-plugins` does both in one
+step.
 
 Codex:
 
