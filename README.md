@@ -46,9 +46,9 @@ the skill has the agent call it only when you ask.
 ## How it works
 
 Each command the agent runs is one HTTPS request to the hosted server, and the answer comes back as
-one line of JSON. After the 5-a-second limit it waits and retries once. The script keeps no state,
-needs no dependencies, and fails with a message that names the cause when a request errors or gets
-no answer within 30 seconds. It exits 2 for a wrong command and 3 when the day's allowance is spent.
+one line of JSON. After the 5-a-second limit the script waits and retries once. It has no
+dependencies. When a request fails or gets no answer within 30 seconds, it exits with a message
+that names the cause. Exit code 2 means a wrong command and 3 means the day's allowance is spent.
 
 | Command                       | Hosted tool    | Answers                                                                                        |
 | ----------------------------- | -------------- | ---------------------------------------------------------------------------------------------- |

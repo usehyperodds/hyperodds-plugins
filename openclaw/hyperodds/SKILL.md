@@ -18,8 +18,8 @@ metadata:
 
 Hyperodds reads every HIP-4 outcome market on Hyperliquid, from every deployer, and estimates a fair
 line from outside quotes where it can. Use this skill when someone asks about Hyperliquid outcome or
-prediction markets: what is listed, what a market trades at, where its fair line sits, which markets
-trade furthest from it after fees, what starts or settles soon, what was just listed, or, when two or
+prediction markets: what is listed or was just listed, what a market trades at, where its fair line
+sits, which markets trade furthest from it after fees, what starts or settles soon, or, when two or
 more deployers list the same question, whether their rules match.
 
 No key is needed, and nothing here can place an order or see an account.
@@ -38,12 +38,12 @@ node {baseDir}/scripts/odds.mjs cluster <outcome>
 
 Get an `<outcome>` id from `markets` (search titles with `--q`) before running `fair` or `cluster`.
 
-| Command             | Answers                                                                                                      | Options                                                                                                                                        |
-| ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `markets`           | Markets with bid, ask, fair line, best edge after fees, 24h volume, status and times                         | `--sort volume` (default), `edge`, `new` or `settling`; `--category`; `--deployer`; `--q` (text in the title, up to 100 characters); `--limit` 1 to 100; `--offset` up to 10,000 |
-| `new`               | The newest listings first, with the same fields                                                              | `--category`, `--limit`, `--offset`                                                                                                            |
-| `fair <outcome>`    | One market's fair line with its band, method, confidence, flags and sources, the book, and the edge each way |                                                                                                                                                |
-| `cluster <outcome>` | The same question, when two or more deployers list it: each member's rule grade and differences, and the merged book | `--id <clusterId>` in place of an outcome, not both                                                                                            |
+| Command             | Answers                                                                                                              | Options                                                                                                                                                                          |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `markets`           | Markets with bid, ask, fair line, best edge after fees, 24h volume, status and times                                 | `--sort volume` (default), `edge`, `new` or `settling`; `--category`; `--deployer`; `--q` (text in the title, up to 100 characters); `--limit` 1 to 100; `--offset` up to 10,000 |
+| `new`               | The newest listings first, with the same fields                                                                      | `--category`, `--limit`, `--offset`                                                                                                                                              |
+| `fair <outcome>`    | One market's fair line with its band, method, confidence, flags and sources, the book, and the edge each way         |                                                                                                                                                                                  |
+| `cluster <outcome>` | The same question, when two or more deployers list it: each member's rule grade and differences, and the merged book | `--id <clusterId>` in place of an outcome; never both                                                                                                                            |
 
 Categories are `sports`, `crypto`, `equities`, `commodities`, `indices`, `macro`, `ipo`, `awards`
 and `other`. Deployer `hl` is Hyperliquid itself; other codes, such as `out`, are other deployers.
@@ -80,15 +80,14 @@ arguments instead of running the script. The server's forecast tools come with t
 - Prices move. Quote `asOf` (UTC) when the tool gives one, and say the prices are as of then.
 - `edgePts` is the best buy edge in percentage points after every fee, including the fee
   Hyperliquid takes at settlement, for a $100 order. 2.9 means 2.9¢ a share. Quote edges in points
-  to one decimal: 2.58 is +2.6 pts.
-  `edgeSide` is the index of that side in `sides`. The edge is null when there is no fair line or
-  $100 would not fill.
+  to one decimal: 2.58 is +2.6 pts. `edgeSide` is the index of that side in `sides`. The edge is
+  null when there is no fair line or $100 would not fill.
 - `fair` adds `edge.buy0`, `buy1`, `sell0` and `sell1`: the edge for each way to trade at
   `refUsd`. A negative edge means the trade costs more than the fair line says it is worth.
 - A fair line is an estimate. Rely on it only when `fairConfidence` is at least 0.5 and
   `singleSource` is false, and say so when either check fails. `--sort edge` ranks the lines that
   pass both checks first. A line read from one venue's options surface is not single-source,
-  because the surface prices every strike; that is by design, not an inconsistency.
+  because the surface prices every strike. Don't report that as a contradiction.
 - `status` is `open`, `live` (the event has started and still trades) or `awaiting` (past its
   time, trading until the deployer settles).
 - `volume24h` counts shares. A share pays $1 if its side wins.
@@ -114,11 +113,11 @@ time for every market, tables included: "Settles at 2026-11-22 21:00 UTC", never
 ## Answering
 
 - Lead with the answer. For each market give the title, deployer, price, a time worded as above
-  and `url`. Every market gets a time: never leave it out.
-- Summarise only what the tool returned. If a field is missing or null, say so rather than fill it
-  in.
+  and `url`. Every market gets a time.
+- Summarise only what the tool returned. If a field is missing or null, say so; never fill it in.
 - Show five markets or fewer unless asked for more.
 - Present edges and fair lines as estimates, never as expected profit. Never call a market
-  actionable, recommend one or tell anyone to trade, and don't say whether a trade is there. To trade, they open the market's link in the
-  Hyperodds Console.
-- Each IP address gets 1,000 market tool calls a day, reset at 00:00 UTC, and 5 requests a second.
+  actionable, recommend one or tell anyone to trade, and never judge whether a trade is worth
+  making. Trading happens in the Hyperodds Console, through the market's link.
+- Limits are per IP address: 1,000 market tool calls a day, reset at 00:00 UTC, and 5 requests a
+  second.

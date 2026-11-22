@@ -2,9 +2,9 @@
 
 > Install the Hyperodds skill in OpenClaw and ask your agent about any Hyperliquid HIP-4 market.
 
-Built on OpenClaw's public skill format (AgentSkills `SKILL.md` with `metadata.openclaw`) and
-published through ClawHub, OpenClaw's public skill registry. No partnership, listing or review by
-OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub account can take.
+Built on OpenClaw's public skill format (AgentSkills `SKILL.md` with `metadata.openclaw`) for
+ClawHub, OpenClaw's public skill registry. Nothing here implies a partnership with OpenClaw: anyone
+with a ClawHub account can publish a skill.
 
 ## What works now
 
@@ -44,7 +44,7 @@ OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub accou
   price examples checked against the console's own formatting, the answer rules).
   `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
-## What is prepared, not done
+## Not done yet
 
 - Publishing to ClawHub (operator, below).
 - The GitHub repository `usehyperodds/hyperodds-plugins` does not exist yet. The README's
@@ -62,7 +62,8 @@ OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub accou
   this Mac changed (checked by modification time before and after).
 - Model: `anthropic/claude-haiku-5-5` through OpenClaw's bundled Claude CLI runtime
   (`agentRuntime.id: "claude-cli"`), which drives the Claude Code login already on this machine.
-  OpenClaw stores no model key in the profile. Any OpenClaw model works with the skill.
+  OpenClaw stores no model key in the profile. The skill names no model; this is the only one
+  tested.
 - `--local` runs the embedded agent, so no Gateway was started.
 
 Setup, exactly as run:
@@ -161,7 +162,7 @@ commands if a post needs one.
 Published skills are released on ClawHub under MIT-0 (ClawHub's rule for every skill); the
 repository stays MIT.
 
-## Honest limits
+## Known limits
 
 - The script only reads, and inherits the hosted server's limits: 1,000 market tool calls a day per
   IP address (reset 00:00 UTC) and 5 requests a second. A busy agent asking broad questions can make
@@ -170,8 +171,7 @@ repository stays MIT.
   not read-only: it records forecasts a person signs, or returns a sign link. The skill calls it
   only when asked.
 - The MCP output gives `starts` and `settles` but not a market's kind, so the skill tells "settles
-  at" from "settles by" by category and title (touch markets). Explicit timing from the server is
-  tracked separately.
+  at" from "settles by" by category and title (touch markets).
 - Fair lines are estimates. The skill tells the agent to say so, but answer quality depends on the
   model the user runs.
 - It needs `node` on the host or inside the sandbox when OpenClaw sandboxes the agent. OpenClaw
@@ -197,22 +197,22 @@ repository stays MIT.
 
 One line:
 
-> Hyperodds is on ClawHub: your OpenClaw agent can now read every HIP-4 market on Hyperliquid.
+> OpenClaw agents can now read every HIP-4 market on Hyperliquid, with the Hyperodds skill on
+> ClawHub.
 
 One paragraph:
 
-> The Hyperodds skill for OpenClaw gives your agent live data on every HIP-4 outcome market on
-> Hyperliquid, from every deployer. Ask which markets trade furthest from their fair line after
-> fees, or, when two or more deployers list the same question, whether their rules match. It needs
-> no key and can't trade. Install it with
-> `openclaw skills install @usehyperodds/hyperodds`.
+> OpenClaw agents can now read every HIP-4 outcome market on Hyperliquid, from every deployer, with
+> the Hyperodds skill. Ask which markets trade furthest from their fair line after fees, or, when
+> two or more deployers list the same question, whether their rules match. It needs no key and
+> can't trade. Install it with `openclaw skills install @usehyperodds/hyperodds`.
 
 One post (link in the reply):
 
-> Hyperodds is on ClawHub.
+> OpenClaw agents can now read every HIP-4 market on Hyperliquid.
 >
-> Install the skill and your OpenClaw agent reads every HIP-4 market on Hyperliquid, with fair lines
-> and the edge after fees wherever Hyperodds can price them.
+> The Hyperodds skill on ClawHub gives them fair lines and the edge after fees wherever Hyperodds
+> can price them.
 >
 > openclaw skills install @usehyperodds/hyperodds
 >
