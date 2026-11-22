@@ -28,7 +28,6 @@ register a project-scope server for anyone who opens Claude Code inside this rep
 early test run picked that unapproved copy over the plugin's.
 
 Every host was installed on this Mac, each in a throwaway config directory:
-
 - **Claude Code 2.1.330**, rerun 22 Nov 2026 (`CLAUDE_CONFIG_DIR` set to a fresh temporary
   directory):
   `claude plugin validate .claude-plugin/plugin.json --strict` passes with nothing to report,

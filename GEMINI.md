@@ -5,7 +5,6 @@ The `hyperodds` MCP server reads Hyperliquid HIP-4 outcome markets (`odds_market
 `odds_forecast_record`, `odds_leaderboard`). No tool can trade or see an account. For a question
 about HIP-4 or Hyperliquid prediction markets, use these tools and activate the `hip4-markets` skill
 for the details.
-
 - Prices are probabilities from 0 to 1 for side 0, the first label in `sides`. Quote them as cents
   with trailing zeros kept: 54.2¢, 0.40¢, 0.11¢, 0.070¢, and 99.91¢ beside 99.95¢ (the skill has
   the rule). Prices move: quote `asOf` (UTC) when the tool gives one.
