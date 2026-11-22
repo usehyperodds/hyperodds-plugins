@@ -1,6 +1,6 @@
 ---
 name: hyperodds
-description: Read live Hyperliquid HIP-4 outcome markets with Hyperodds. Prices, fair lines and edges after fees, the same question across deployers, new listings.
+description: Read live Hyperliquid HIP-4 outcome markets with Hyperodds. Prices, fair lines, edges after fees, new listings, and rules where deployers share a question.
 homepage: https://usehyperodds.com/docs/mcp
 metadata:
   openclaw:
@@ -11,7 +11,7 @@ metadata:
     envVars:
       - name: HYPERODDS_MCP_URL
         required: false
-        description: Another Hyperodds MCP endpoint to read from. Defaults to https://api.usehyperodds.com/mcp.
+        description: Another Hyperodds MCP endpoint to read from, answering plain JSON. Defaults to https://api.usehyperodds.com/mcp.
 ---
 
 # Hyperodds
@@ -19,8 +19,8 @@ metadata:
 Hyperodds reads every HIP-4 outcome market on Hyperliquid, from every deployer, and estimates a fair
 line from outside quotes where it can. Use this skill when someone asks about Hyperliquid outcome or
 prediction markets: what is listed, what a market trades at, where its fair line sits, which markets
-trade furthest from it after fees, whether two deployers list the same question under the same
-rules, what starts or settles soon or what was just listed.
+trade furthest from it after fees, what starts or settles soon, what was just listed, or, when two or
+more deployers list the same question, whether their rules match.
 
 No key is needed, and nothing here can place an order or see an account.
 
@@ -40,10 +40,10 @@ Get an `<outcome>` id from `markets` (search titles with `--q`) before running `
 
 | Command             | Answers                                                                                                      | Options                                                                                                                                        |
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `markets`           | Markets with bid, ask, fair line, best edge after fees, 24h volume, status and times                         | `--sort volume` (default), `edge`, `new` or `settling`; `--category`; `--deployer`; `--q` (text in the title); `--limit` 1 to 100; `--offset` up to 10,000 |
+| `markets`           | Markets with bid, ask, fair line, best edge after fees, 24h volume, status and times                         | `--sort volume` (default), `edge`, `new` or `settling`; `--category`; `--deployer`; `--q` (text in the title, up to 100 characters); `--limit` 1 to 100; `--offset` up to 10,000 |
 | `new`               | The newest listings first, with the same fields                                                              | `--category`, `--limit`, `--offset`                                                                                                            |
 | `fair <outcome>`    | One market's fair line with its band, method, confidence, flags and sources, the book, and the edge each way |                                                                                                                                                |
-| `cluster <outcome>` | The same question on several deployers: each member's rule grade and differences, and the merged book        | `--id <clusterId>` in place of an outcome, not both                                                                                            |
+| `cluster <outcome>` | The same question, when two or more deployers list it: each member's rule grade and differences, and the merged book | `--id <clusterId>` in place of an outcome, not both                                                                                            |
 
 Categories are `sports`, `crypto`, `equities`, `commodities`, `indices`, `macro`, `ipo`, `awards`
 and `other`. Deployer `hl` is Hyperliquid itself; other codes, such as `out`, are other deployers.
@@ -67,10 +67,14 @@ arguments instead of running the script. The server's forecast tools come with t
 ## Reading the numbers
 
 - `bid`, `ask` and `fair` are probabilities from 0 to 1 for side 0, the first label in `sides`
-  (usually Yes). Quote them as cents to one decimal, as the Hyperodds Console does: 0.542 is 54.2¢.
-  Use two decimals below 1¢ or above 99¢, and three below 0.1¢ or above 99.9¢: 0.0006 is 0.060¢.
-  When a bid and an ask would print the same, add decimals until they differ, up to three: 0.03 and
-  0.03001 are 3.000¢ and 3.001¢.
+  (usually Yes). Quote them as cents, as the Hyperodds Console does, and keep trailing zeros:
+  - from 1¢ to 99¢, one decimal: 0.542 is 54.2¢;
+  - below 1¢ or above 99¢, two decimals: 0.004 is 0.40¢ and 0.009 is 0.90¢, never 0.4¢ or 0.9¢;
+  - below 0.1¢ or above 99.9¢, three decimals: 0.0006 is 0.060¢;
+  - when a bid and an ask would print the same at one decimal, give both the fewest decimals, up
+    to three, that tell them apart: 0.9991 and 0.99948 are 99.91¢ and 99.95¢, and 0.03 and 0.03001
+    are 3.000¢ and 3.001¢.
+- Prices move. Quote `asOf` (UTC) when the tool gives one, and say the prices are as of then.
 - `edgePts` is the best buy edge in percentage points after every fee, including the fee
   Hyperliquid takes at settlement, for a $100 order. 2.9 means 2.9¢ a share; quote it as +2.9 pts.
   `edgeSide` is the index of that side in `sides`. The edge is null when there is no fair line or
@@ -83,8 +87,8 @@ arguments instead of running the script. The server's forecast tools come with t
 - `status` is `open`, `live` (the event has started and still trades) or `awaiting` (past its
   time, trading until the deployer settles).
 - `volume24h` counts shares. A share pays $1 if its side wins.
-- A `clusterId` means other deployers list the same question. Run `cluster` before comparing their
-  prices. `SAME` means no rule difference was found, though members can still settle through
+- A `clusterId` means two or more deployers list the same question. Run `cluster` before comparing
+  their prices. `SAME` means no rule difference was found, though members can still settle through
   different deployers. `CLOSE` and `DIFFERENT` members list their rule differences in `diffs`, and
   `flipped` means a member's sides are reversed.
 
@@ -103,9 +107,12 @@ the deadline, the latest the market can settle. Both are UTC; say so.
 
 ## Answering
 
-- Lead with the answer. For each market give the title, deployer, price, its times as above and
-  `url`.
+- Lead with the answer. For each market give the title, deployer, price, a time worded as above
+  and `url`. Every market gets a time: never leave it out.
+- Summarise only what the tool returned. If a field is missing or null, say so rather than fill it
+  in.
 - Show five markets or fewer unless asked for more.
-- Present edges and fair lines as estimates, never as expected profit, and do not tell anyone to
-  trade. To trade, they open the market's link in the Hyperodds Console.
+- Present edges and fair lines as estimates, never as expected profit. Never call a market
+  actionable, recommend one or tell anyone to trade. To trade, they open the market's link in the
+  Hyperodds Console.
 - Each IP address gets 1,000 market tool calls a day, reset at 00:00 UTC, and 5 requests a second.
