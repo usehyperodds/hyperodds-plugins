@@ -19,7 +19,7 @@ One repository root is all three packages:
 | `mcp.json`                         | Codex                                 | Agent Plugins MCP config (`type: "streamable-http"`)                          |
 | `.agents/plugins/marketplace.json` | Codex                                 | Marketplace `hyperodds`, policy and category                                  |
 | `gemini-extension.json`            | Gemini CLI                            | Extension manifest, MCP server as `httpUrl`                                   |
-| `GEMINI.md`                        | Gemini CLI                            | Always-on context: five rules for reading the numbers                         |
+| `GEMINI.md`                        | Gemini CLI                            | Always-on context: how to read the numbers, say the times and take forecasts  |
 | `skills/hip4-markets/SKILL.md`     | Claude Code, Codex, Gemini CLI        | The skill: which tool for which question, how to read and present the numbers |
 | `assets/icon.png`                  | Codex app, Claude directory listing   | The Hyperodds mark, 512×512                                                   |
 
@@ -44,9 +44,10 @@ Proof, every host installed here, each in a throwaway config directory:
   `codex plugin add hyperodds@hyperodds` installs 0.1.0 into the cache; `codex plugin list` shows
   `installed, enabled`; `codex mcp list` shows the `hyperodds` server enabled.
   `codex debug prompt-input` shows `hyperodds:hip4-markets` in the skills the model would see.
-  `docs/feature/editor-plugins/codex-check.mjs` drives Codex's own app server: it lists the 4
-  tools Codex discovered from the plugin's server and calls `odds_markets` through Codex's MCP
-  client, returning live markets. No model turn: the throwaway home has no ChatGPT login.
+  `docs/feature/editor-plugins/codex-check.mjs` drives Codex's own app server: it lists the 7
+  tools Codex discovered from the plugin's server (rerun on 22 Nov 2026) and calls `odds_markets`
+  through Codex's MCP client, returning live markets. No model turn: the throwaway home has no
+  ChatGPT login.
 - **Gemini CLI 0.66.0** (`GEMINI_CLI_HOME` set to a fresh temporary directory):
   `gemini extensions validate .` passes; `gemini extensions install . --consent --skip-settings`
   installs after the folder-trust prompt; `gemini extensions list` shows the `GEMINI.md` context
@@ -54,11 +55,12 @@ Proof, every host installed here, each in a throwaway config directory:
   `hyperodds ... Connected` in a trusted folder. No model turn: there is no Gemini login or key.
 - The user configurations on this Mac (`~/.claude`, `~/.codex/config.toml`, `~/.gemini`) carry no
   trace of these installs (checked after the runs).
-- Tests: `node --test` runs 9 manifest tests (same name, version and description everywhere;
+- Tests: `node --test` runs 11 manifest tests (same name, version and description everywhere;
   the same endpoint in each host's transport format; the Agent Plugins schema rules for
   `plugin.json` and `mcp.json`; both marketplace files; referenced files exist; no root
-  `.mcp.json`; the skill's frontmatter and tool names). `npx @biomejs/biome@2.6.2 check .` is
-  clean. CI runs both on Node 22 and 24.
+  `.mcp.json`; the skill's frontmatter; all seven server tools named in the skill and `GEMINI.md`;
+  no manifest calling the plugin read-only, and Codex's `Write` capability).
+  `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
 ## What is prepared, not done
 
@@ -99,10 +101,14 @@ for that reason.
 Plex Mono). Throwaway directories show as `$CODEX_HOME` and `$GEMINI_CLI_HOME`, the home directory
 as `~`.
 - `editor-claude-answer.png`: Claude Code answering "Which HIP-4 markets show the biggest edge
-  after fees right now? Top three." through the plugin (live data, 4 Nov 2026 about 23:50 UTC).
-- `editor-claude.png`: marketplace add, install, `claude mcp list` (Connected), plugin details.
-- `editor-codex.png`: marketplace add, plugin add, plugin list, `codex mcp list`, and
-  `codex-check.mjs` listing the 4 tools and a live `odds_markets` call through Codex.
+  after fees right now? Top three." through the plugin (live data, 4 Nov 2026 about 23:50 UTC). It
+  predates the skill's time and price wording: it says "Settles" for touch markets that settle by
+  that time, and quotes whole cents. Recapture it with a model run before a post uses it.
+- `editor-claude.png`: marketplace add, install, `claude mcp list` (Connected), plugin details
+  (recaptured 22 Nov 2026 from a fresh clone at `/tmp/hyperodds-plugins`).
+- `editor-codex.png`: marketplace add, plugin add, plugin list, `codex mcp list`, and the check
+  script (copied to `/tmp`) listing the 7 tools and a live `odds_markets` call through Codex
+  (recaptured 22 Nov 2026 from the same clone).
 - `editor-gemini.png`: validate, install with the trust prompt, extension list (context file, MCP
   server, skill), `gemini mcp list` (Connected).
 - `codex-check.mjs`: the Codex app-server check used for `editor-codex.png`.
@@ -111,18 +117,26 @@ No recording: nothing here moves.
 
 ## What the operator must do
 
-1. Create the public repository and push `main` once both `feature/openclaw` and this branch are
-   merged:
+1. Keep the write-ups off the public `main`. When merging, move `FEATURE-editor-plugins.md` and
+   `docs/feature/editor-plugins/` out of the repository into the private ops folder
+   (`ops/feature/plugins/editor-plugins/`), and do the same for every other unit's `FEATURE-*.md`
+   and `docs/feature/<unit>/`. Check before pushing:
+
+   ```sh
+   git ls-files 'FEATURE-*.md' docs/feature   # must print nothing
+   ```
+
+2. Create the public repository and push `main` once the plugins branches are merged:
 
    ```sh
    gh repo create usehyperodds/hyperodds-plugins --public \
-     --description "Hyperodds for Claude Code, Codex, Gemini CLI and OpenClaw: live, read-only HIP-4 market data" \
+     --description "Hyperodds plugins: live data on Hyperliquid HIP-4 outcome markets" \
      --homepage https://usehyperodds.com/docs/mcp
    git remote add origin https://github.com/usehyperodds/hyperodds-plugins.git
    git push -u origin main
    ```
 
-2. Gemini CLI gallery: add the topic and tag the first release; the crawler indexes daily.
+3. Gemini CLI gallery: add the topic and tag the first release; the crawler indexes daily.
 
    ```sh
    gh repo edit usehyperodds/hyperodds-plugins \
@@ -136,7 +150,7 @@ No recording: nothing here moves.
    `https://github.com/search?q=repo%3Ausehyperodds%2Fhyperodds-plugins+gemini-extension.json&type=code`
    while signed in to trigger indexing.
 
-3. Check each install line from the public repository in a clean directory:
+4. Check each install line from the public repository in a clean directory:
 
    ```sh
    CLAUDE_CONFIG_DIR=$(mktemp -d) claude plugin marketplace add usehyperodds/hyperodds-plugins
@@ -144,11 +158,11 @@ No recording: nothing here moves.
    GEMINI_CLI_HOME=$(mktemp -d) gemini extensions install https://github.com/usehyperodds/hyperodds-plugins --consent
    ```
 
-4. Optional, separate reviews: Anthropic's directory through https://claude.ai/directory/manage
+5. Optional, separate reviews: Anthropic's directory through https://claude.ai/directory/manage
    (needs a paid claude.ai plan; `claude plugin validate .claude-plugin/plugin.json --profile directory`
    passes today), and OpenAI's plugin directory through https://platform.openai.com/plugins (needs
    a verified organization, five test cases and domain verification for api.usehyperodds.com).
-5. Post the announcement below with the repository link in a reply.
+6. Post the announcement below with the repository link in a reply.
 
 ## Honest limits
 
@@ -161,15 +175,25 @@ No recording: nothing here moves.
 - Gemini CLI asks the user to trust the extension source, and disables MCP servers in untrusted
   workspaces. Skills ask for consent the first time they activate. Both are Gemini's design.
 - `codex mcp list` prints `Auth: Unsupported` for the server. It means the server offers no OAuth,
-  which is correct for a keyless read-only server.
-- Hosts copy the whole repository root, so `docs/` (about 1 MB of screenshots after both branches
-  merge) and `test/` ride along in each install.
-- Merging this branch after `feature/openclaw` conflicts in `README.md` only: keep the OpenClaw
-  section from that branch and the Claude Code, Codex and Gemini CLI sections from this one. The
-  shared scaffold commit is identical on both branches.
-- The hosted server's limits apply: 1,000 tool calls a day per IP address and 5 requests a second.
-  If the server later adds tools (item 1 adds `search` and `fetch`), the skill still works; it
-  names only the four `odds_*` tools.
+  which is correct for a keyless server.
+- Hosts copy the whole repository root, so `test/` and every other unit's folder (`excel/`,
+  `openclaw/`, `raycast/`, `shortcuts/`, `snap/`, about 1 MB together) ride along in each install;
+  Codex also copies `.git`. The write-ups and screenshots stay off the public `main` (step 1).
+- Six branches share this repository and an identical scaffold commit: `feature/editor-plugins`,
+  `feature/openclaw`, `feature/excel`, `feature/metamask-snap`, `feature/raycast` and
+  `feature/siri`. Merged in that order (checked in a scratch clone), this branch merges cleanly,
+  `feature/openclaw` conflicts in `README.md` (keep every unit's section), and each of the last
+  four conflicts in `.github/workflows/ci.yml`, because every branch adds that file and
+  `feature/excel` and `feature/raycast` add jobs to it: keep the shared `test` job once, plus the
+  `excel` and `raycast` jobs.
+- The hosted server's limits apply: 1,000 market tool calls a day per IP address (the forecast
+  tools don't count) and 5 requests a second.
+- Every host gets the server's seven tools. `odds_forecast` is not read-only: it records forecasts
+  a person signs, or returns a sign link. The skill calls it only when the person asks to enter a
+  forecast.
+- The MCP output gives `starts` and `settles` but not a market's kind, so the skill tells "settles
+  at" from "settles by" by category and title (touch markets). Explicit timing from the server is
+  tracked separately.
 
 ## Links
 
@@ -194,16 +218,17 @@ One paragraph:
 > Hyperodds plugins put live HIP-4 market data inside Claude Code, Codex and Gemini CLI. The
 > plugin connects the Hyperodds MCP server and adds a skill that teaches the agent to read fair
 > lines and edges after fees. Ask which markets trade furthest from their fair line, or whether two
-> deployers list the same question under the same rules. It is read-only and needs no key.
+> deployers list the same question under the same rules. It needs no key, and no tool can trade or
+> see an account.
 
 One post (link in the reply):
 
 > Hyperodds now installs in Claude Code, Codex and Gemini CLI.
 >
-> Your coding agent can read every HIP-4 market on Hyperliquid, with its fair line and the edge
-> after every fee.
+> Your coding agent can read every HIP-4 market on Hyperliquid, with fair lines and the edge after
+> fees wherever Hyperodds can price them.
 >
-> Read-only. No key. Install lines below.
+> No key, and it can't trade. Install lines below.
 
 Reply: `https://github.com/usehyperodds/hyperodds-plugins` (the README has the install line for
 each tool).
