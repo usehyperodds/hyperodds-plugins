@@ -60,12 +60,12 @@ Cursor, VS Code, Claude Desktop and other MCP clients can connect to the same se
 | Codex       | `plugin.json`, `.agents/plugins/marketplace.json`               | `mcp.json` (Streamable HTTP)                   | `skills/hip4-markets/SKILL.md`                 |
 | Gemini CLI  | `gemini-extension.json`                                         | `mcpServers` in the manifest (Streamable HTTP) | `GEMINI.md` and `skills/hip4-markets/SKILL.md` |
 
-The MCP server gives seven tools. `odds_markets`, `odds_new`, `odds_fair` and `odds_cluster` read
+The MCP server has seven tools. `odds_markets`, `odds_new`, `odds_fair` and `odds_cluster` read
 markets; `odds_forecast`, `odds_forecast_record` and `odds_leaderboard` enter and read the public
 forecast record, and the skill tells the agent to enter a forecast only when you ask. The
 [MCP guide](https://usehyperodds.com/docs/mcp) explains every field. Each IP address gets 1,000
-market tool calls a day, reset at 00:00 UTC, and the forecast tools don't count toward it. Every
-request also counts toward 5 a second.
+market tool calls a day, reset at 00:00 UTC (the forecast tools don't count), and 5 requests a
+second across every tool.
 
 ## Development
 

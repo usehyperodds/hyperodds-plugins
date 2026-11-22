@@ -23,12 +23,12 @@ One repository root is all three packages:
 | `skills/hip4-markets/SKILL.md`     | Claude Code, Codex, Gemini CLI        | The skill: which tool for which question, how to read and present the numbers |
 | `assets/icon.png`                  | Codex app, Claude directory listing   | The Hyperodds mark, 512×512                                                   |
 
-The MCP server is deliberately declared inline in `.claude-plugin/plugin.json` rather than in a
-root `.mcp.json`: a root `.mcp.json` would also register a project-scope server for anyone who
-opens Claude Code inside this repository, and a first test run picked that unapproved copy over
-the plugin's.
+The MCP server is declared inline in `.claude-plugin/plugin.json`. A root `.mcp.json` would also
+register a project-scope server for anyone who opens Claude Code inside this repository, and an
+early test run picked that unapproved copy over the plugin's.
 
-Proof, every host installed here, each in a throwaway config directory:
+Every host was installed on this Mac, each in a throwaway config directory:
+
 - **Claude Code 2.1.318** (`CLAUDE_CONFIG_DIR` set to a fresh temporary directory):
   `claude plugin validate .claude-plugin/plugin.json --strict` passes with nothing to report,
   including the plugin-directory checks. `claude plugin marketplace add ./` and
@@ -55,7 +55,7 @@ Proof, every host installed here, each in a throwaway config directory:
   `hyperodds ... Connected` in a trusted folder. No model turn: there is no Gemini login or key.
 - The user configurations on this Mac (`~/.claude`, `~/.codex/config.toml`, `~/.gemini`) carry no
   trace of these installs (checked after the runs).
-- Tests: `node --test` runs 13 manifest tests (same name, version and description everywhere;
+- Tests: `node --test` runs 13 tests (same name, version and description everywhere;
   the same endpoint in each host's transport format; the Agent Plugins schema rules for
   `plugin.json` and `mcp.json`; both marketplace files; referenced files exist; no root
   `.mcp.json`; the skill's frontmatter; all seven server tools named in the skill and `GEMINI.md`;
@@ -63,7 +63,7 @@ Proof, every host installed here, each in a throwaway config directory:
   examples checked against the console's own formatting; the answer rules).
   `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
-## What is prepared, not done
+## Not done yet
 
 - The public GitHub repository. Every install line in the README needs
   `github.com/usehyperodds/hyperodds-plugins` to exist and be public.
@@ -165,13 +165,13 @@ No recording: nothing here moves.
    a verified organization, five test cases and domain verification for api.usehyperodds.com).
 6. Post the announcement below with the repository link in a reply.
 
-## Honest limits
+## Known limits
 
 - A model answer was proven in Claude Code only. Codex and Gemini CLI are proven up to the agent's
   own MCP client: installed, connected, tools discovered, and in Codex a live tool call. Their
   model turns need a login this build did not have.
-- The Claude Code answer ran with the plugin loaded through `--plugin-dir` on this Mac's existing
-  login, not from the throwaway install (which had no login). The plugin, skill and server are the
+- The Claude Code answer ran on this Mac's existing login with the plugin loaded through
+  `--plugin-dir`, because the throwaway install had no login. The plugin, skill and server are the
   same files either way.
 - Gemini CLI asks the user to trust the extension source, and disables MCP servers in untrusted
   workspaces. Skills ask for consent the first time they activate. Both are Gemini's design.
@@ -194,8 +194,7 @@ No recording: nothing here moves.
   a person signs, or returns a sign link. The skill calls it only when the person asks to enter a
   forecast.
 - The MCP output gives `starts` and `settles` but not a market's kind, so the skill tells "settles
-  at" from "settles by" by category and title (touch markets). Explicit timing from the server is
-  tracked separately.
+  at" from "settles by" by category and title (touch markets).
 
 ## Links
 
@@ -213,24 +212,23 @@ No recording: nothing here moves.
 
 One line:
 
-> Hyperodds now installs in Claude Code, Codex and Gemini CLI.
+> Agents in Claude Code, Codex and Gemini CLI can now read every HIP-4 market on Hyperliquid.
 
 One paragraph:
 
-> Hyperodds plugins put live HIP-4 market data inside Claude Code, Codex and Gemini CLI. The
-> plugin connects the Hyperodds MCP server and adds a skill that teaches the agent to read fair
-> lines and edges after fees. Ask which markets trade furthest from their fair line, or, when two
-> or more deployers list the same question, whether their rules match. It needs no key, and no tool
-> can trade or see an account.
+> Agents in Claude Code, Codex and Gemini CLI can now read every HIP-4 market on Hyperliquid
+> through the Hyperodds plugin. It connects the Hyperodds MCP server and adds a skill that teaches
+> the agent to read fair lines and edges after fees. Ask which markets trade furthest from their
+> fair line, or, when two or more deployers list the same question, whether their rules match. It
+> needs no key, and no tool can trade or see an account.
 
 One post (link in the reply):
 
-> Hyperodds now installs in Claude Code, Codex and Gemini CLI.
+> Agents in Claude Code, Codex and Gemini CLI can now read every HIP-4 market on Hyperliquid.
 >
-> Your coding agent can read every HIP-4 market on Hyperliquid, with fair lines and the edge after
-> fees wherever Hyperodds can price them.
+> They get fair lines and the edge after fees wherever Hyperodds can price them.
 >
-> No key, and it can't trade. Install lines below.
+> No key, and no tool can trade. Install lines in the reply.
 
 Reply: `https://github.com/usehyperodds/hyperodds-plugins` (the README has the install line for
 each tool).
