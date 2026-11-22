@@ -3,7 +3,7 @@
   "name": "hyperodds",
   "displayName": "Hyperodds",
   "version": "0.1.0",
-  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, rule comparisons across deployers and new listings. No key needed, and no tool can trade or see an account.",
+  "description": "Live data on Hyperliquid HIP-4 outcome markets: books, fair lines with their sources, edges after fees, new listings, and rule comparisons when two or more deployers list the same question. No key needed, and no tool can trade or see an account.",
   "author": {
     "name": "Hyperodds",
     "email": "dev@usehyperodds.com",

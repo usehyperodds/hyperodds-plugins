@@ -1,8 +1,8 @@
 # Hyperodds plugins
 
 Live data on Hyperliquid's HIP-4 outcome markets, inside the agents you already use: markets from
-every deployer, fair lines with their sources, edges after fees, rule comparisons where several
-deployers list the same question, and the newest listings. Everything here reads from the free
+every deployer, fair lines with their sources, edges after fees, the newest listings, and rule
+comparisons when two or more deployers list the same question. Everything here reads from the free
 Hyperodds MCP server at `https://api.usehyperodds.com/mcp`, which also takes forecasts for its public
 forecast record when you ask an agent to enter one. There is no key to set up, and no tool can trade
 or see an account.
@@ -36,8 +36,10 @@ Gemini CLI:
 gemini extensions install https://github.com/usehyperodds/hyperodds-plugins
 ```
 
-Start a new session and ask. `claude mcp list`, `codex mcp list` and `gemini mcp list` show the
-`hyperodds` server once it is installed.
+Start a new session and ask. Once it is installed, `claude mcp list` shows the server as
+`plugin:hyperodds:hyperodds`, and `codex mcp list` and `gemini mcp list` show it as `hyperodds`.
+Gemini CLI asks you to trust the extension when you install it, and runs its MCP server only in
+folders you trust.
 
 Cursor, VS Code, Claude Desktop and other MCP clients can connect to the same server directly; see
 [hyperodds-mcp](https://github.com/usehyperodds/hyperodds-mcp).
@@ -45,7 +47,7 @@ Cursor, VS Code, Claude Desktop and other MCP clients can connect to the same se
 ## What to ask
 
 - "Which HIP-4 markets show the biggest edge after fees right now?"
-- "Is the next Fed decision priced the same on every deployer, and do their rules match?"
+- "Does any question have more than one deployer right now, and do their rules match?"
 - "Where does the fair line for the BTC markets settling today come from, and how far should I
   trust it?"
 - "What was listed in the last hour?"
