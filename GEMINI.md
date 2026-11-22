@@ -6,9 +6,10 @@ The `hyperodds` MCP server gives data on Hyperliquid HIP-4 outcome markets (`odd
 about HIP-4 or Hyperliquid prediction markets, use these tools and activate the `hip4-markets` skill
 for the details.
 - Prices are probabilities from 0 to 1 for side 0, the first label in `sides`. Quote them as cents
-  with trailing zeros kept: 54.2¢, 0.40¢, 0.90¢, and 99.91¢ beside 99.95¢ (the skill has the rule).
+  with trailing zeros kept: 54.2¢, 0.40¢, 0.11¢, 0.070¢, and 99.91¢ beside 99.95¢ (the skill has the rule).
   Prices move: quote `asOf` (UTC) when the tool gives one.
 - `edgePts` is in percentage points after every fee for a $100 order, on the side `edgeSide` names.
+  Quote it to one decimal: +2.6 pts.
 - Rely on a fair line only when `fairConfidence` is at least 0.5 and `singleSource` is false.
 - When two or more deployers list the same question, call `odds_cluster` before comparing them.
   `SAME` means no rule difference was found.
