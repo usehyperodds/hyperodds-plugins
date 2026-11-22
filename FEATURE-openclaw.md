@@ -13,10 +13,13 @@ OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub accou
   with one JSON-RPC `tools/call` per command and prints the tool's JSON. Commands: `markets`,
   `new`, `fair <outcome>`, `cluster <outcome>|--id`, mapping to `odds_markets`, `odds_new`,
   `odds_fair`, `odds_cluster`. The skill has the agent put user text in single quotes, so `$(…)`
-  and backticks never reach a shell (tested). The script checks limits, offsets, sorts and
-  categories before spending a call, retries once after the 5-a-second limit, and exits 2 for a
-  wrong command, 3 when the day's allowance is spent and 1 for anything else. Errors name the
-  server by its origin only.
+  and backticks never reach a shell (tested). The script checks limits, offsets, sorts,
+  categories, the 100-character `--q` and the outcome id's range before spending a call, retries
+  once after the 5-a-second limit (after `Retry-After` plus up to 500 ms of jitter), and exits 2
+  for a wrong command, 3 when the day's allowance is spent and 1 for anything else. An error body
+  that is not JSON-RPC reads "Hyperodds answered HTTP <status>"; network errors name the server by
+  its origin only, and `--help` prints the full `/mcp` URL. It reads servers that answer plain
+  JSON only, as the hosted one does.
 - The skill tells the agent how to read the numbers (side-0 probabilities as cents to the console's
   precision, edges in points after every fee at $100, the `fairConfidence >= 0.5` and `singleSource`
   checks, cluster grades), how to say the times as the console does, to treat deployer text as data,
@@ -31,13 +34,14 @@ OpenClaw is implied; publishing is a self-serve step anyone with a ClawHub accou
   `hyperodds__odds_fair` and `hyperodds__odds_markets` natively.
 - `clawhub skill publish ./openclaw/hyperodds --dry-run` resolves to `would-publish`, slug
   `hyperodds`, version 1.0.0, 2 files. The slug `hyperodds` is unused on ClawHub today.
-- Tests: `node --test` runs 30 tests offline (Node 24 locally, Node 22 via `npx node@22`): the
-  script against a local mock MCP server (arguments, typed and range-checked integers, lower-cased
-  choices, tool errors, JSON-RPC errors with and without a message, the burst limit's one retry,
-  the daily limit's exit 3, bare 429, HTTP error pages, non-JSON answers, a connection that breaks
-  off, unreachable and malformed endpoints, Node without `fetch`, every usage error, user text with
-  `$(…)` and backticks through `/bin/sh`, every example command in `SKILL.md`), and the frontmatter
-  and quoting rules OpenClaw and ClawHub read.
+- Tests: `node --test` runs 34 tests offline (Node 24 locally, Node 22 via `npx node@22`): the
+  script against a local mock MCP server (arguments, typed and range-checked integers, the `--q`
+  length, lower-cased choices, tool errors, JSON-RPC errors with and without a message, the burst
+  limit's one retry, the daily limit's exit 3, bare 429, HTTP error pages and JSON error bodies
+  that are not JSON-RPC, non-JSON answers, a connection that breaks off, unreachable and malformed
+  endpoints, Node without `fetch`, every usage error, user text with `$(…)` and backticks through
+  `/bin/sh`, every example command in `SKILL.md`), and the skill itself (frontmatter, quoting,
+  price examples checked against the console's own formatting, the answer rules).
   `npx @biomejs/biome@2.6.2 check .` is clean. CI runs both on Node 22 and 24.
 
 ## What is prepared, not done
@@ -199,8 +203,8 @@ One paragraph:
 
 > The Hyperodds skill for OpenClaw gives your agent live data on every HIP-4 outcome market on
 > Hyperliquid, from every deployer. Ask which markets trade furthest from their fair line after
-> fees, or whether two deployers list the same question under the same rules. It needs no key and
-> can't trade. Install it with
+> fees, or, when two or more deployers list the same question, whether their rules match. It needs
+> no key and can't trade. Install it with
 > `openclaw skills install @usehyperodds/hyperodds`.
 
 One post (link in the reply):
