@@ -1,11 +1,21 @@
 # Hyperodds plugins
 
-Live data on Hyperliquid's HIP-4 outcome markets, inside the agents you already use: markets from
-every deployer, fair lines with their sources, edges after fees, the newest listings, and rule
-comparisons when two or more deployers list the same question. Everything here reads from the free
-Hyperodds MCP server at `https://api.usehyperodds.com/mcp`, which also takes forecasts for its public
-forecast record when you ask an agent to enter one. There is no key to set up, and no tool can trade
-or see an account.
+Live data on Hyperliquid's HIP-4 outcome markets, in the tools you already use: markets from every
+deployer, fair lines with their sources, edges after fees and the newest listings. There is no key
+to set up, and nothing here can trade or see an account.
+
+| Where                          | What you get                                                        | Folder                |
+| ------------------------------ | ------------------------------------------------------------------- | --------------------- |
+| Claude Code, Codex, Gemini CLI | The Hyperodds MCP server and the `hip4-markets` skill               | this repository       |
+| OpenClaw                       | The `hyperodds` skill                                               | `openclaw/hyperodds/` |
+| Raycast                        | Market search, top edges, new listings and prices in the menu bar   | `raycast/`            |
+| Excel                          | Streaming functions such as `=HYPERODDS.PRICE(id)`                  | `excel/`              |
+| MetaMask                       | A Snap that explains Hyperliquid signature requests before you sign | `snap/`               |
+
+The agent plugins read from the free Hyperodds MCP server at `https://api.usehyperodds.com/mcp`,
+which also takes forecasts for its public forecast record when you ask an agent to enter one. The
+Raycast extension and the Excel add-in read the public API under `https://api.usehyperodds.com/trpc`.
+The Snap decodes each request inside MetaMask and makes no network calls.
 
 ## Claude Code, Codex and Gemini CLI
 
@@ -72,6 +82,40 @@ openclaw mcp add hyperodds --url https://api.usehyperodds.com/mcp --transport st
 The server's tools include `odds_forecast`, which enters a forecast in the public forecast record;
 the skill has the agent call it only when you ask.
 
+## Raycast
+
+Four commands for the Raycast launcher on macOS: Search Markets, Top Edges, New Listings and Pinned
+Prices, which keeps the markets you follow in the menu bar. Each market shows both sides' bid and
+ask, the fair line and the edge after fees.
+
+```sh
+cd raycast
+npm ci
+npm run dev
+```
+
+`npm run dev` adds the extension to Raycast. [raycast/README.md](raycast/README.md) explains every
+command and how to read the numbers.
+
+## Excel
+
+`=HYPERODDS.PRICE(id)` shows a market's price in cents and updates in the cell as the market moves.
+`FAIR`, `EDGE` and `MARKET` work the same way. The add-in installs from
+https://usehyperodds.com/excel/index.html: download its manifest and upload it in Excel on the web,
+where a free Microsoft account is enough. [excel/README.md](excel/README.md) has the full reference,
+and `excel/` holds the source of the hosted add-in.
+
+## MetaMask
+
+Hyperodds Signature Insights is a MetaMask Snap. When a site asks MetaMask to sign a Hyperliquid
+request, it adds a panel that says what the signature allows: which key gets access and until when,
+the most a builder can charge, or where funds go. It asks MetaMask for one permission, to show a
+panel on signature requests and see which site sent them. It has no network access and stores
+nothing.
+
+Install it from https://usehyperodds.com/metamask. [snap/README.md](snap/README.md) lists every
+request it explains and its limits.
+
 ## What to ask
 
 - "Which HIP-4 markets show the biggest edge after fees right now?"
@@ -122,7 +166,7 @@ JSON only.
 
 ## Development
 
-You need Node.js 22 or later.
+You need Node.js 22.18 or later.
 
 ```sh
 node --test
@@ -133,8 +177,8 @@ gemini extensions validate .
 
 The tests check that every manifest names the same server, version and skill, and that the Codex
 files follow the Agent Plugins 1.0.0 schemas. They run the OpenClaw script against a local mock
-server, so they need no network. See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull
-request.
+server, so they need no network. `raycast/`, `excel/` and `snap/` are npm packages with their own
+checks. See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## Security
 

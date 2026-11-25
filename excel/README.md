@@ -4,12 +4,12 @@ Live HIP-4 odds as Excel functions. Type `=HYPERODDS.MARKET("btc")` in A1 for a 
 their outcome ids in column A, then `=HYPERODDS.PRICE(A2)` in the first free column (N2) and fill it down.
 Each cell follows its market on Hyperliquid. Prices and fair lines are in cents and edges in points.
 
-| Function                                     | Gives                                                                                                                   |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Function                                     | Gives                                                                                                                                                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `=HYPERODDS.PRICE(outcome, [side], [quote])` | The price of one side in cents, 0 to 100: `"mid"` (default), `"bid"`, `"ask"` or `"last"`. 100 or 0 once settled. No mid on a book wider than 10 points |
-| `=HYPERODDS.FAIR(outcome, [side])`           | The Hyperodds fair line in cents: its estimate of the chance that side wins                                             |
-| `=HYPERODDS.EDGE(outcome, [side])`           | Points on a $100 buy: the fair line minus the price you'd pay (the ask) after every fee; without a side, the better one |
-| `=HYPERODDS.MARKET([search], [limit])`       | A spilled table of matching markets, busiest first                                                                      |
+| `=HYPERODDS.FAIR(outcome, [side])`           | The Hyperodds fair line in cents: its estimate of the chance that side wins                                                                             |
+| `=HYPERODDS.EDGE(outcome, [side])`           | Points on a $100 buy: the fair line minus the price you'd pay (the ask) after every fee; without a side, the better one                                 |
+| `=HYPERODDS.MARKET([search], [limit])`       | A spilled table of matching markets, busiest first                                                                                                      |
 
 `MARKET` columns: outcome, market, status (Open, In play, Started 25m ago, Settlement was due 2h ago,
 Settled), deployer, side, bid (¢), ask (¢), fair (¢), edge side, edge (pts), volume 24h (contracts, each worth
