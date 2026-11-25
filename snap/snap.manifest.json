@@ -1,0 +1,23 @@
+{
+  "version": "0.1.0",
+  "description": "Explains Hyperliquid signature requests in plain words before you sign them.",
+  "proposedName": "Hyperodds Signature Insights",
+  "source": {
+    "shasum": "yXw7w51qoT/AbIxkdDKurbibolh2pP/Fh5mjJIU3fGk=",
+    "location": {
+      "npm": {
+        "filePath": "dist/bundle.js",
+        "iconPath": "images/icon.svg",
+        "packageName": "@hyperodds/snap",
+        "registry": "https://registry.npmjs.org/"
+      }
+    }
+  },
+  "initialPermissions": {
+    "endowment:signature-insight": {
+      "allowSignatureOrigin": true
+    }
+  },
+  "platformVersion": "12.1.0",
+  "manifestVersion": "0.1"
+}

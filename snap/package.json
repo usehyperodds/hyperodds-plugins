@@ -1,0 +1,52 @@
+{
+  "name": "@hyperodds/snap",
+  "version": "0.1.0",
+  "description": "Explains Hyperliquid signature requests in plain words before you sign them in MetaMask.",
+  "keywords": [
+    "metamask",
+    "snap",
+    "hyperliquid",
+    "signature-insight",
+    "eip-712"
+  ],
+  "homepage": "https://usehyperodds.com/metamask",
+  "license": "MIT",
+  "author": "Hyperodds <dev@usehyperodds.com> (https://usehyperodds.com)",
+  "sideEffects": false,
+  "main": "./dist/bundle.js",
+  "files": [
+    "dist/",
+    "images/",
+    "snap.manifest.json"
+  ],
+  "scripts": {
+    "build": "mm-snap build",
+    "prepack": "mm-snap build",
+    "serve": "mm-snap serve",
+    "start": "mm-snap watch",
+    "test": "mm-snap build && jest",
+    "typecheck": "tsc --noEmit",
+    "explain": "node scripts/explain.mjs"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@metamask/snaps-cli": "8.4.1",
+    "@metamask/snaps-jest": "10.2.2",
+    "@metamask/snaps-sdk": "12.1.0",
+    "@noble/hashes": "1.8.0",
+    "@swc/core": "^1.11.31",
+    "@swc/jest": "^0.2.38",
+    "jest": "^29.7.0",
+    "typescript": "~5.8.3"
+  },
+  "overrides": {
+    "@metamask/snaps-simulation": "4.3.2"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

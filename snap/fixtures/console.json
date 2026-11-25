@@ -1,0 +1,173 @@
+{
+  "approveAgentConsole": {
+    "note": "The Hyperodds console's API wallet approval: name hyperodds, 179 days, on Arbitrum One. Built by the console's own code (packages/hl) and serialized by viem as wagmi sends it to MetaMask; same EIP-712 hash as payloads.json",
+    "from": "0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+    "data": {
+      "domain": {
+        "name": "HyperliquidSignTransaction",
+        "version": "1",
+        "chainId": 42161,
+        "verifyingContract": "0x0000000000000000000000000000000000000000"
+      },
+      "message": {
+        "hyperliquidChain": "Mainnet",
+        "agentAddress": "0x8465414cedb577d816de94634c26404778d6dd35",
+        "agentName": "hyperodds valid_until 1810641600000",
+        "nonce": 1795176000000
+      },
+      "primaryType": "HyperliquidTransaction:ApproveAgent",
+      "types": {
+        "EIP712Domain": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "chainId",
+            "type": "uint256"
+          },
+          {
+            "name": "verifyingContract",
+            "type": "address"
+          }
+        ],
+        "HyperliquidTransaction:ApproveAgent": [
+          {
+            "name": "hyperliquidChain",
+            "type": "string"
+          },
+          {
+            "name": "agentAddress",
+            "type": "address"
+          },
+          {
+            "name": "agentName",
+            "type": "string"
+          },
+          {
+            "name": "nonce",
+            "type": "uint64"
+          }
+        ]
+      }
+    }
+  },
+  "approveBuilderFeeHyperodds": {
+    "note": "The Hyperodds console's builder fee approval: 0.1% (100 tenths of a basis point) on Arbitrum One. Built by the console's own code (packages/hl) and serialized by viem as wagmi sends it to MetaMask; same EIP-712 hash as payloads.json",
+    "from": "0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+    "data": {
+      "domain": {
+        "name": "HyperliquidSignTransaction",
+        "version": "1",
+        "chainId": 42161,
+        "verifyingContract": "0x0000000000000000000000000000000000000000"
+      },
+      "message": {
+        "hyperliquidChain": "Mainnet",
+        "maxFeeRate": "0.1%",
+        "builder": "0xd31d379ba70a5b1a0689cfaa748beeeeac9846e9",
+        "nonce": 1795176000000
+      },
+      "primaryType": "HyperliquidTransaction:ApproveBuilderFee",
+      "types": {
+        "EIP712Domain": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "chainId",
+            "type": "uint256"
+          },
+          {
+            "name": "verifyingContract",
+            "type": "address"
+          }
+        ],
+        "HyperliquidTransaction:ApproveBuilderFee": [
+          {
+            "name": "hyperliquidChain",
+            "type": "string"
+          },
+          {
+            "name": "maxFeeRate",
+            "type": "string"
+          },
+          {
+            "name": "builder",
+            "type": "address"
+          },
+          {
+            "name": "nonce",
+            "type": "uint64"
+          }
+        ]
+      }
+    }
+  },
+  "usdClassTransferConsole": {
+    "note": "The Hyperodds console moving 25 USDC from perps to spot before an outcome order. Built by the console's own code (packages/hl) and serialized by viem as wagmi sends it to MetaMask; same EIP-712 hash as payloads.json",
+    "from": "0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+    "data": {
+      "domain": {
+        "name": "HyperliquidSignTransaction",
+        "version": "1",
+        "chainId": 42161,
+        "verifyingContract": "0x0000000000000000000000000000000000000000"
+      },
+      "message": {
+        "hyperliquidChain": "Mainnet",
+        "amount": "25",
+        "toPerp": false,
+        "nonce": 1795176000000
+      },
+      "primaryType": "HyperliquidTransaction:UsdClassTransfer",
+      "types": {
+        "EIP712Domain": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "chainId",
+            "type": "uint256"
+          },
+          {
+            "name": "verifyingContract",
+            "type": "address"
+          }
+        ],
+        "HyperliquidTransaction:UsdClassTransfer": [
+          {
+            "name": "hyperliquidChain",
+            "type": "string"
+          },
+          {
+            "name": "amount",
+            "type": "string"
+          },
+          {
+            "name": "toPerp",
+            "type": "bool"
+          },
+          {
+            "name": "nonce",
+            "type": "uint64"
+          }
+        ]
+      }
+    }
+  }
+}

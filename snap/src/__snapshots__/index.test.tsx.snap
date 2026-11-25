@@ -1,0 +1,507 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`onSignature approveAgentConsole 1`] = `
+[
+  "[warning] Gives a key trading access: Whoever holds it can trade this account's funds until it expires. Approve keys only from apps you trust.",
+  "# Approve an API wallet",
+  "The key below can trade for this account, including perps with leverage. It can't withdraw, but its trades can lose this account's funds.",
+  "API wallet: 0x8465414CEDb577d816de94634c26404778d6Dd35",
+  "Name: hyperodds",
+  "Expires: 18 May 2027, 12:00 UTC (time left)",
+  "Replaces: Any API wallet already named "hyperodds"",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveAgentNamed 1`] = `
+[
+  "[warning] Gives a key trading access: Whoever holds it can trade this account's funds until you remove or replace it. Approve keys only from apps you trust.",
+  "# Approve an API wallet",
+  "The key below can trade for this account, including perps with leverage. It can't withdraw, but its trades can lose this account's funds.",
+  "API wallet: 0x8465414CEDb577d816de94634c26404778d6Dd35",
+  "Name: bot",
+  "Expires: No expiry set",
+  "Replaces: Any API wallet already named "bot"",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveAgentSpoofedName 1`] = `
+[
+  "[warning] Gives a key trading access: Whoever holds it can trade this account's funds until it expires. Approve keys only from apps you trust.",
+  "# Approve an API wallet",
+  "The key below can trade for this account, including perps with leverage. It can't withdraw, but its trades can lose this account's funds.",
+  "API wallet: 0x0e1888248816D70D0AcB7637B1d634700E7550e5",
+  "Name: HyperOdds",
+  "Expires: 18 May 2027, 12:00 UTC (time left)",
+  "Replaces: Any API wallet already named "HyperOdds"",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveAgentUnnamed 1`] = `
+[
+  "[warning] Gives a key trading access: Whoever holds it can trade this account's funds until you remove or replace it. Approve keys only from apps you trust.",
+  "# Approve an API wallet",
+  "The key below can trade for this account, including perps with leverage. It can't withdraw, but its trades can lose this account's funds.",
+  "API wallet: 0x8465414CEDb577d816de94634c26404778d6Dd35",
+  "Expires: No expiry set",
+  "Replaces: Your unnamed API wallet, if you have one",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveBuilderFeeAboveCap 1`] = `
+[
+  "[warning] Above Hyperliquid's limit: Builder fees are capped at 1%. Hyperliquid will refuse this rate.",
+  "# Approve a builder fee of up to 2%",
+  "The builder below can add a fee of up to 2% to orders you place through its app. It can't place orders or move funds.",
+  "Builder: 0x8c967E73E7B15087c42A10D344cFf4c96D877f1D",
+  "Most it can charge: 2% of each order",
+  "Lasts: Until you approve a different rate",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveBuilderFeeHyperodds 1`] = `
+[
+  "[warning] Highest perps fee: 0.1% is the most Hyperliquid lets a builder charge on perps orders.",
+  "# Approve a builder fee of up to 0.1%",
+  "Hyperodds can add a fee of up to 0.1% to orders you place through its console. It can't place orders or move funds.",
+  "Builder: 0xd31d379Ba70A5B1a0689cfAA748bEEEEAc9846e9",
+  "Builder name: Hyperodds",
+  "Most it can charge: 0.1% of each order",
+  "Lasts: Until you approve a different rate",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveBuilderFeeLow 1`] = `
+[
+  "[info] Fee approval only: It sets a ceiling on one builder's fee.",
+  "# Approve a builder fee of up to 0.001%",
+  "The builder below can add a fee of up to 0.001% to orders you place through its app. It can't place orders or move funds.",
+  "Builder: 0x8c967E73E7B15087c42A10D344cFf4c96D877f1D",
+  "Most it can charge: 0.001% of each order",
+  "Lasts: Until you approve a different rate",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveBuilderFeeSpotCap 1`] = `
+[
+  "[warning] Above the perps limit: Perps fees are capped at 0.1%. On spot orders this builder can charge up to 1%.",
+  "# Approve a builder fee of up to 1%",
+  "The builder below can add a fee of up to 1% to orders you place through its app. It can't place orders or move funds.",
+  "Builder: 0x8c967E73E7B15087c42A10D344cFf4c96D877f1D",
+  "Most it can charge: 1% of each order",
+  "Lasts: Until you approve a different rate",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature approveBuilderFeeZero 1`] = `
+[
+  "[info] Removes a fee: Orders through this builder then carry no builder fee.",
+  "# Set a builder fee to 0%",
+  "The builder below can no longer charge a fee on your orders.",
+  "Builder: 0x8c967E73E7B15087c42A10D344cFf4c96D877f1D",
+  "Most it can charge: 0% of each order",
+  "Lasts: Until you approve a different rate",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature cDeposit 1`] = `
+[
+  "[info] Stays in this account: Only the balance the HYPE sits in changes.",
+  "# Move 75 HYPE into staking",
+  "Moves 75 HYPE from your spot balance to your staking balance.",
+  "Amount: 75 HYPE",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature cWithdraw 1`] = `
+[
+  "[info] Stays in this account: Only the balance the HYPE sits in changes.",
+  "# Move 20 HYPE out of staking",
+  "Moves 20 HYPE from your staking balance back to spot, after Hyperliquid's 7-day unstaking queue.",
+  "Amount: 20 HYPE",
+  "Lasts: Arrives after 7 days",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature convertToMultiSigUser 1`] = `
+[
+  "[danger] Hands control to a group of signers: If you don't control enough of these signers, you lose access to the account.",
+  "# Turn this account into a 2-of-2 multi-sig",
+  "After this, actions on this account need signatures from 2 of the 2 signers below. This wallet alone can no longer act for it.",
+  "Signer 1: 0x11A9B34b79c02a19ce3A7AFC1d69660B6EE3Ee1E",
+  "Signer 2: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "Signatures needed: 2 of 2",
+  "Lasts: Until the signers convert it back",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature convertToMultiSigUserRevert 1`] = `
+[
+  "[warning] Changes who controls the account: Make sure every signer agreed to this.",
+  "# Turn a multi-sig back into a normal account",
+  "After this, the account no longer needs its signers' approvals.",
+  "Lasts: Until the account is converted again",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature l1Order 1`] = `
+[
+  "[danger] Details can't be shown: Trading apps usually sign these with an API wallet. If a site asks your main wallet, be sure you started this action.",
+  "# Sign a Hyperliquid trading action",
+  "This signs one trading action, such as an order or a cancel. Hyperliquid hashes its details, so no wallet can show what it does.",
+  "Action hash: 0xa4ca4d97753df7ba9f50f8e2bd48251e94e436fb60f79349a832d69908b11c6a",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature l1Testnet 1`] = `
+[
+  "[danger] Details can't be shown: Trading apps usually sign these with an API wallet. If a site asks your main wallet, be sure you started this action.",
+  "# Sign a Hyperliquid trading action",
+  "This signs one trading action, such as an order or a cancel. Hyperliquid hashes its details, so no wallet can show what it does.",
+  "Action hash: 0x5d165c6ff08854973dc369baa14a5359c0d399b0ecb9b1654e30989888e1c749",
+  "Lasts: Once",
+  "Network: Hyperliquid testnet",
+]
+`;
+
+exports[`onSignature linkStakingUser 1`] = `
+[
+  "[warning] Can't be undone: Hyperliquid has no way to unlink. Link only accounts you control.",
+  "# Link a trading account to this staking account",
+  "Confirms a permanent link with the trading account below. Its trades then get this account's staking fee discount, and this account stops getting one.",
+  "Trading account: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Lasts: Permanent",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature linkStakingUserInitiate 1`] = `
+[
+  "[danger] Gives another account control of your funds: Once that account confirms, it can lock this account and take all of its funds. Link only to an account you control.",
+  "# Ask to link this account to a staking account",
+  "Starts a permanent link with the staking account below, for its staking fee discount. That account has to confirm it.",
+  "Staking account: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Lasts: Permanent once both sides sign",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature multiSigSendAsset 1`] = `
+[
+  "[danger] Sends funds to another address: Check the whole address. Hyperliquid can't reverse a transfer.",
+  "# Multi-sig: Send 100 USDC",
+  "You sign as one signer of the multi-sig account below. Moves 100 USDC from the multi-sig account's perps balance to the perps balance of the address below.",
+  "Multi-sig account: 0xcB1983119D23f962e40DA3e119Ea322cD826470f",
+  "Submitted by: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "To: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Amount: 100 USDC",
+  "From balance: Perps",
+  "To balance: Perps",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature multiSigSendToEvmWithData 1`] = `
+[
+  "[warning] Sends to the multi-sig address: On Arbitrum One that address is controlled by its own key, not by the multi-sig's signers.",
+  "# Multi-sig: Send 1 USDC to Arbitrum One",
+  "You sign as one signer of the multi-sig account below. Sends 1 USDC out of Hyperliquid to the recipient below on Arbitrum One.",
+  "Multi-sig account: 0xcB1983119D23f962e40DA3e119Ea322cD826470f",
+  "Submitted by: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "Recipient: 0xcB1983119D23f962e40DA3e119Ea322cD826470f",
+  "Chain: Arbitrum One (42161)",
+  "Amount: 1 USDC",
+  "From balance: Spot",
+  "Gas limit: 200,000",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature multiSigWithdraw 1`] = `
+[
+  "[warning] Withdraws to the multi-sig address: On Arbitrum One that address is controlled by its own key, not by the multi-sig's signers.",
+  "# Multi-sig: Withdraw 10 USDC to Arbitrum One",
+  "You sign as one signer of the multi-sig account below. Withdraws 10 USDC from Hyperliquid to the address below on Arbitrum One, less Hyperliquid's withdrawal fee.",
+  "Multi-sig account: 0xcB1983119D23f962e40DA3e119Ea322cD826470f",
+  "Submitted by: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "To: 0xcB1983119D23f962e40DA3e119Ea322cD826470f",
+  "Amount: 10 USDC",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendAssetFromSubAccount 1`] = `
+[
+  "[info] Stays in this account: The funds go from a sub-account to the account that signs.",
+  "# Move 100 USDC from a sub-account",
+  "Moves 100 USDC from the sub-account below to this account's xyz perps balance.",
+  "From sub-account: 0xcDAA19b1acd399049F4184267CA5a29C932fC28D",
+  "Amount: 100 USDC",
+  "From balance: Perps",
+  "To balance: Perps on xyz",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendAssetOther 1`] = `
+[
+  "[danger] Sends funds to another address: Check the whole address. Hyperliquid can't reverse a transfer.",
+  "# Send 12.5 HYPE",
+  "Moves 12.5 HYPE from this account's spot balance to the spot balance of the address below.",
+  "To: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Amount: 12.5 HYPE",
+  "Token ID: 0x0d01dc56dcaaca66ad901c959b4011ec",
+  "From balance: Spot",
+  "To balance: Spot",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendAssetOwnDexes 1`] = `
+[
+  "[info] Stays in this account: Only the balance the funds sit in changes.",
+  "# Move 30 USDC from perps to spot",
+  "Moves funds between this account's own balances on Hyperliquid.",
+  "Amount: 30 USDC",
+  "From balance: Perps",
+  "To balance: Spot",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendMultiSig 1`] = `
+[
+  "[warning] Details can't be shown: Check the action in the app that collected the signatures.",
+  "# Submit a multi-sig action",
+  "Submits an action that the multi-sig account's signers approved. Its details are hashed, so no wallet can show them here.",
+  "Action hash: 0x20bc628e257065c22787a6d11422d36fbc81143772b9ce68b86e1b963fb61dcb",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendToEvmWithData 1`] = `
+[
+  "[danger] Sends funds to a contract call: Sign only if you started this transfer in an app you trust. It can't be reversed.",
+  "# Send 1 USDC to Arbitrum One",
+  "Sends 1 USDC out of Hyperliquid to the recipient below on Arbitrum One, with data for a contract to run.",
+  "Recipient: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Chain: Arbitrum One (42161)",
+  "Amount: 1 USDC",
+  "From balance: Spot",
+  "Contract data: 4 bytes",
+  "Gas limit: 200,000",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature sendToEvmWithDataSelf 1`] = `
+[
+  "[warning] Leaves Hyperliquid: Sign only if you started this transfer in an app you trust. It can't be reversed.",
+  "# Send 1 USDC to Arbitrum One",
+  "Sends 1 USDC out of Hyperliquid to the recipient below on Arbitrum One.",
+  "Recipient: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "Chain: Arbitrum One (42161)",
+  "Amount: 1 USDC",
+  "From balance: Spot",
+  "Gas limit: 200,000",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature spotSend 1`] = `
+[
+  "[danger] Sends funds to another address: Check the whole address. Hyperliquid can't reverse a transfer.",
+  "# Send 1,000 PURR",
+  "Moves 1,000 PURR from this account's spot balance to the address below on Hyperliquid.",
+  "To: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Amount: 1,000 PURR",
+  "Token ID: 0xc1fb593aeffbeb02f85e0308e9956a90",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature stakingLinkDisableTradingUser 1`] = `
+[
+  "[danger] Can't be undone: Sign only if you control both accounts and mean to shut the trading account down for good.",
+  "# Lock a linked trading account and receive its funds in a year",
+  "You sign as the staking account. The trading account below can no longer trade or move its funds, and after one year all of them move to this staking account.",
+  "Trading account: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Its funds go to: This staking account, after one year",
+  "Lasts: Permanent",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature tokenDelegate 1`] = `
+[
+  "[info] Stays in this account: Delegated HYPE remains yours.",
+  "# Delegate 50 HYPE",
+  "Stakes 50 HYPE from your staking balance with the validator below.",
+  "Validator: 0x358b66F044C8Ed6C8b06Da939Be6467fa0140f4b",
+  "Amount: 50 HYPE",
+  "Lasts: Locked with this validator for at least 1 day",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature tokenUndelegate 1`] = `
+[
+  "[info] Stays in this account: Delegated HYPE remains yours.",
+  "# Undelegate 0.5 HYPE",
+  "Returns 0.5 HYPE from the validator below to your staking balance.",
+  "Validator: 0x358b66F044C8Ed6C8b06Da939Be6467fa0140f4b",
+  "Amount: 0.5 HYPE",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature usdClassTransferConsole 1`] = `
+[
+  "[info] Stays in this account: Only the balance the USDC sits in changes.",
+  "# Move 25 USDC from perps to spot",
+  "Moves USDC between this account's own balances. Nothing leaves the account.",
+  "Amount: 25 USDC",
+  "From: Perps",
+  "To: Spot",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature usdClassTransferSubAccount 1`] = `
+[
+  "[info] Stays in this account: Only the balance the USDC sits in changes.",
+  "# Move 10 USDC from spot to perps",
+  "Moves USDC between the perps and spot balances of the sub-account below. Nothing leaves it.",
+  "Amount: 10 USDC",
+  "From: Spot",
+  "To: Perps",
+  "Sub-account: 0xcDAA19b1acd399049F4184267CA5a29C932fC28D",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature usdSend 1`] = `
+[
+  "[danger] Sends funds to another address: Check the whole address. Hyperliquid can't reverse a transfer.",
+  "# Send 250.5 USDC",
+  "Moves 250.5 USDC from this account's perps balance to the address below on Hyperliquid.",
+  "To: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Amount: 250.5 USDC",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature usdSendSelf 1`] = `
+[
+  "[info] Goes to the same account: The USDC stays with the account that signs.",
+  "# Send 5 USDC",
+  "Moves 5 USDC from this account's perps balance to the address below on Hyperliquid.",
+  "To: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "Amount: 5 USDC",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature userDexAbstraction 1`] = `
+[
+  "[info] Account setting: You can change it back.",
+  "# Turn on HIP-3 DEX abstraction",
+  "Changes how this account's collateral is used on HIP-3 perp DEXs. It moves no funds out of the account.",
+  "Lasts: Until you change it",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature userPortfolioMargin 1`] = `
+[
+  "[warning] Margin works differently: Liquidation levels of open positions can change. Read Hyperliquid's guide to this mode first.",
+  "# Turn on portfolio margin",
+  "Changes how margin is shared across this account's balances and positions. It moves no funds out of the account.",
+  "Lasts: Until you change it",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature userSetAbstraction 1`] = `
+[
+  "[warning] Margin works differently: Liquidation levels of open positions can change. Read Hyperliquid's guide to this mode first.",
+  "# Switch to portfolio margin mode",
+  "Changes how margin is shared across this account's balances and positions. It moves no funds out of the account.",
+  "Lasts: Until you change it",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature userSetAbstractionDisabled 1`] = `
+[
+  "[warning] Margin works differently: Liquidation levels of open positions can change. Read Hyperliquid's guide to this mode first.",
+  "# Switch to standard mode",
+  "Changes how margin is shared across this account's balances and positions. It moves no funds out of the account.",
+  "Lasts: Until you change it",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature userSetAbstractionUnified 1`] = `
+[
+  "[warning] Margin works differently: Liquidation levels of open positions can change. Read Hyperliquid's guide to this mode first.",
+  "# Switch to unified account mode",
+  "Changes how margin is shared across this account's balances and positions. It moves no funds out of the account.",
+  "Lasts: Until you change it",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature withdraw 1`] = `
+[
+  "[danger] Withdraws to another address: Check the whole address. A withdrawal can't be reversed.",
+  "# Withdraw 1,200 USDC to Arbitrum One",
+  "Withdraws 1,200 USDC from Hyperliquid to the address below on Arbitrum One, less Hyperliquid's withdrawal fee.",
+  "To: 0x9c5781c5353bD5E17eB883F3E78634d4D9c092b0",
+  "Amount: 1,200 USDC",
+  "Lasts: Once",
+  "Network: Hyperliquid",
+]
+`;
+
+exports[`onSignature withdrawSelf 1`] = `
+[
+  "[info] Withdraws to the same address: The USDC arrives at the signing address on Arbitrum Sepolia.",
+  "# Withdraw 40 USDC to Arbitrum Sepolia",
+  "Withdraws 40 USDC from Hyperliquid to the address below on Arbitrum Sepolia, less Hyperliquid's withdrawal fee.",
+  "To: 0x3DE927fcC729450313c8ac20162B28f61A2A4D96",
+  "Amount: 40 USDC",
+  "Lasts: Once",
+  "Network: Hyperliquid testnet",
+]
+`;
