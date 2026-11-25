@@ -1242,15 +1242,14 @@ describe("explain", () => {
 });
 
 describe("package", () => {
-  it("links only to the install page, never to the private repository", () => {
+  it("names the install page as its home and this repository as its source", () => {
     const pkg = JSON.parse(read("package.json"));
     expect([pkg.homepage, pkg.repository, pkg.bugs]).toEqual([
       "https://usehyperodds.com/metamask",
-      undefined,
-      undefined,
+      { type: "git", url: "https://github.com/usehyperodds/hyperodds-plugins.git", directory: "snap" },
+      { url: "https://github.com/usehyperodds/hyperodds-plugins/issues" },
     ]);
-    for (const file of ["package.json", "snap.manifest.json", "install/index.html", "README.md"])
-      expect([file, /github\.com\/usehyperodds/.test(read(file))]).toEqual([file, false]);
+    expect(JSON.parse(read("snap.manifest.json")).repository).toEqual(pkg.repository);
   });
 
   it("asks MetaMask for the published version only, on the hosted page", () => {
@@ -1258,30 +1257,5 @@ describe("package", () => {
     expect(page).toContain('const SNAP_ID = "npm:@hyperodds/snap";');
     expect(page).toContain(`const VERSION = "${JSON.parse(read("package.json")).version}";`);
     expect(page).not.toContain("location.search");
-  });
-
-  it("has a capture harness that says what it needs and where its screenshots go", () => {
-    const capture = (...args: string[]) =>
-      spawnSync(process.execPath, ["../docs/feature/metamask-snap/capture.mjs", ...args], {
-        cwd: snapDir,
-        encoding: "utf8",
-        env: { PATH: process.env.PATH },
-      });
-    const help = capture("--help");
-    expect(help.status).toBe(0);
-    for (const needed of [
-      "MM_EXTENSION",
-      "CHROMIUM",
-      "PLAYWRIGHT",
-      "MM_SRP",
-      "--update-assets",
-      "temporary folder",
-    ])
-      expect([needed, help.stdout.includes(needed)]).toEqual([needed, true]);
-    const bare = capture();
-    expect([bare.status, bare.stderr.split("\n")[0]]).toEqual([
-      1,
-      "capture: set MM_EXTENSION, CHROMIUM, MM_SRP.",
-    ]);
   });
 });

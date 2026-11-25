@@ -2,8 +2,13 @@
   "version": "0.1.0",
   "description": "Explains Hyperliquid signature requests in plain words before you sign them.",
   "proposedName": "Hyperodds Signature Insights",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/usehyperodds/hyperodds-plugins.git",
+    "directory": "snap"
+  },
   "source": {
-    "shasum": "yXw7w51qoT/AbIxkdDKurbibolh2pP/Fh5mjJIU3fGk=",
+    "shasum": "JX2UikhGWQFz3KsVv979PQPK39imKtc377Pf0j/vABc=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
