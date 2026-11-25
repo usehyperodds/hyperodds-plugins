@@ -11,6 +11,7 @@ import {
   menuBar,
   pairDecimals,
   pct,
+  plainMarkdown,
   price,
   priceText,
   pts,
@@ -26,6 +27,26 @@ import {
 import { btc, bucket, fed, game, ipo, NOW, settled, touch } from "./fixtures.ts";
 
 const flat = (groups: Row[][]) => Object.fromEntries(groups.flat().map((r) => [r.title, r.text]));
+
+describe("titles in the detail pane", () => {
+  test("a title keeps its words and loses its markup", () => {
+    assert.equal(
+      plainMarkdown("BTC above 59,129 at Nov 26 06:00 UTC"),
+      "BTC above 59,129 at Nov 26 06:00 UTC",
+    );
+    assert.equal(plainMarkdown("NBA 2026/2027 winner (East): Boston"), "NBA 2026/2027 winner (East): Boston");
+    assert.equal(plainMarkdown("S&P 500 above $2,000B"), "S\\&P 500 above \\$2,000B");
+    assert.equal(
+      plainMarkdown("![x](https://e.example/p.png)"),
+      "\\![x]\u200b(https:\u200b//e.example/p.png)",
+    );
+    assert.equal(
+      plainMarkdown("<img src=x> `code` *bold* _it_"),
+      "\\<img src=x\\> \\`code\\` \\*bold\\* \\_it\\_",
+    );
+    assert.equal(plainMarkdown("a\n# b \\(x\\) $$y$$"), "a \\# b \\\\(x\\\\) \\$\\$y\\$\\$");
+  });
+});
 
 describe("numbers", () => {
   test("cents keep the tick near 0 and 1", () => {
@@ -111,6 +132,8 @@ describe("time", () => {
       starts: null,
       by: null,
     });
+    const sent = { settles: null, starts: 7, by: 9 };
+    assert.deepEqual(timing({ kind: "price_binary", eventTime: 5, deadline: 5, timing: sent }), sent);
     assert.deepEqual(timing({ kind: "price_binary", eventTime: 5, deadline: 9 }), {
       settles: null,
       starts: null,
