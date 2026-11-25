@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hyperodds for Excel</title>
+    <meta
+      name="description"
+      content="Live HIP-4 odds as Excel functions. Type =HYPERODDS.MARKET(&quot;btc&quot;) for a live table of markets, then =HYPERODDS.PRICE beside it and the cell follows the market."
+    />
+    <link rel="icon" href="assets/icon-32.png" />
+    <link rel="stylesheet" href="page.css" />
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  </head>
+  <body data-mode="web">
+    <main>
+      <header class="brand">
+        <img src="assets/icon-64.png" alt="" width="28" height="28" />
+        <span>Hyperodds</span>
+        <span class="for">for Excel</span>
+      </header>
+
+      <section class="intro web-only">
+        <h1>Live HIP-4 odds in your spreadsheet</h1>
+        <p>
+          Type <code>=HYPERODDS.MARKET("btc")</code> in A1 for a live table of markets, then
+          <code>=HYPERODDS.PRICE(A2)</code> in the first free column. The cell follows the market on Hyperliquid,
+          in cents. On every market Hyperodds prices, the fair line and the edge after fees update the same way.
+        </p>
+        <p class="actions">
+          <a class="button" href="manifest.xml" download>Download the add-in</a>
+          <a href="#install">How to install</a>
+        </p>
+      </section>
+
+      <p class="status" data-status data-state="idle"><i></i><span></span></p>
+
+      <section class="preview web-only" aria-label="Live preview">
+        <div class="formula"><span>fx</span><code>=HYPERODDS.MARKET("btc", 5)</code></div>
+        <div class="sheet"><table data-preview></table></div>
+        <p class="note">The function Excel runs, live in this page.</p>
+      </section>
+
+      <section class="start excel-only">
+        <h2>Start here</h2>
+        <p>
+          Type <code>=HYPERODDS.MARKET("btc")</code> in A1 for a live table with outcome ids in column A, then
+          <code>=HYPERODDS.PRICE(A2)</code> in N2 and fill it down.
+        </p>
+      </section>
+
+      <section class="functions">
+        <h2>Functions</h2>
+        <dl>
+          <dt id="price"><code>=HYPERODDS.PRICE(outcome, [side], [quote])</code></dt>
+          <dd>
+            The price of one side in cents, from 0 to 100. <code>side</code> is 0 or "Yes" (the default), 1 or
+            "No", or the side's name. <code>quote</code> is "mid" (the default), "bid", "ask" or "last". The mid
+            shows #N/A when one side of the book is empty or the bid and ask are more than 10 points apart.
+            Once a market settles it shows 100 for the side that won and 0 for the other. The Status column of
+            <code>MARKET</code> shows whether a game is in play or settlement is overdue.
+          </dd>
+          <dt id="fair"><code>=HYPERODDS.FAIR(outcome, [side])</code></dt>
+          <dd>
+            The Hyperodds fair line in cents: its estimate of the chance that the side wins.
+          </dd>
+          <dt id="edge"><code>=HYPERODDS.EDGE(outcome, [side])</code></dt>
+          <dd>
+            The edge in points (cents) on a $100 buy of the side: the fair line minus the price you'd pay at the
+            ask, fees included. Leave out the side to get the better of the two.
+          </dd>
+          <dt id="market"><code>=HYPERODDS.MARKET([search], [limit])</code></dt>
+          <dd>
+            A live table of the markets that match the search, busiest first, 20 rows unless you set a limit of up
+            to 100. Each row has the outcome id, market, status (Open, In play, Started 25m ago, Settlement was due
+            2h ago, Settled), deployer, side, bid, ask and fair line in cents, the edge side and its points,
+            contracts traded in 24 hours, a game's start or a decision's time, and when the market settles. Times
+            are in UTC and arrive as text, because a custom function can't format its cell as a date.
+          </dd>
+        </dl>
+        <p>
+          An outcome id is the number at the end of a market's link, <code>usehyperodds.com/m/&lt;id&gt;</code>.
+          You can paste the link itself instead.
+        </p>
+      </section>
+
+      <section class="install web-only" id="install">
+        <h2>Install</h2>
+        <ol>
+          <li>Download <a href="manifest.xml" download>manifest.xml</a>.</li>
+          <li>Open a workbook in Excel on the web at <a href="https://www.office.com">office.com</a>. A free Microsoft account works.</li>
+          <li>Select Home, then Add-ins, then More Settings, and choose Upload My Add-in.</li>
+          <li>Upload manifest.xml. A Hyperodds group appears on the Home tab.</li>
+          <li>Type <code>=HYPERODDS.MARKET("btc")</code> in a cell.</li>
+        </ol>
+        <p>
+          Excel keeps an uploaded add-in in your browser's storage, so after clearing site data or switching
+          browsers you upload it again.
+        </p>
+        <p>
+          Office lists the add-in as able to read and change your workbook, the permission Excel requires of every
+          add-in with custom functions. The add-in writes each result to the cell that asked for it and leaves the
+          rest of the workbook alone.
+        </p>
+        <p class="note" data-elsewhere hidden></p>
+      </section>
+
+      <footer>
+        <p>
+          Read-only: nothing here can trade or see an account. Data comes from Hyperliquid's HIP-4 markets
+          through the Hyperodds API. Third-party names describe compatibility only; no affiliation.
+        </p>
+        <p>
+          <a href="https://usehyperodds.com" target="_blank" rel="noopener">usehyperodds.com</a>
+          <a href="https://usehyperodds.com/contact" target="_blank" rel="noopener">Contact</a>
+        </p>
+      </footer>
+    </main>
+    <script src="functions.js"></script>
+  </body>
+</html>

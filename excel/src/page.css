@@ -1,0 +1,326 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/assets/fonts/ibm-plex-mono-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/assets/fonts/ibm-plex-mono-medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  --paper: #f8f9f6;
+  --raised: #ffffff;
+  --ink: #252a23;
+  --muted: #6b7166;
+  --line: #e3e3e0;
+  --grid: #e6e8e2;
+  --head: #f0f2ea;
+  --accent: #526342;
+  --live: #4f8a4a;
+  --wait: #b4862f;
+  --up: #dcefd6;
+  --down: #f5dcd6;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #070b0c;
+    --raised: #10191b;
+    --ink: #e8efec;
+    --muted: #9aaca7;
+    --line: #243436;
+    --grid: #1f2d2f;
+    --head: #131f21;
+    --accent: #b8d3c9;
+    --live: #7cc28a;
+    --wait: #d7b066;
+    --up: #1d3a2b;
+    --down: #3d2222;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font:
+    13px / 1.7 "IBM Plex Mono",
+    ui-monospace,
+    Menlo,
+    Consolas,
+    monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 32px 56px;
+}
+
+body[data-mode="excel"] main {
+  padding: 18px 16px 28px;
+}
+
+body[data-mode="excel"] .web-only,
+body[data-mode="web"] .excel-only {
+  display: none;
+}
+
+a {
+  color: var(--accent);
+}
+
+code {
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+h1,
+h2 {
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.2;
+  max-width: 820px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+section {
+  margin-top: 36px;
+}
+
+body[data-mode="excel"] section {
+  margin-top: 22px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.brand .for {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.intro p {
+  max-width: 700px;
+  font-size: 14px;
+  margin: 18px 0 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+
+.button {
+  display: inline-block;
+  padding: 9px 16px;
+  border: 1px solid #1d231b;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #2d3529, #171c15);
+  color: #f5f5f1;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button {
+    background: linear-gradient(160deg, #edf3ee, #bed0c9);
+    border-color: #dce7df;
+    color: #102021;
+  }
+}
+
+.status {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: 32px 0 0;
+  color: var(--muted);
+}
+
+body[data-mode="excel"] .status {
+  margin-top: 16px;
+}
+
+.status i {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  transform: translateY(-1px);
+}
+
+.status[data-state="live"] i {
+  background: var(--live);
+}
+
+.status[data-state="polling"] i,
+.status[data-state="reconnecting"] i,
+.status[data-state="connecting"] i {
+  background: var(--wait);
+}
+
+.preview {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--raised);
+  overflow: hidden;
+}
+
+.formula {
+  display: flex;
+  gap: 14px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.formula span {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.sheet {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+}
+
+caption {
+  padding: 14px;
+  text-align: left;
+  color: var(--muted);
+}
+
+th,
+td {
+  border: 1px solid var(--grid);
+  padding: 3px 7px;
+  white-space: nowrap;
+  text-align: left;
+  transition: background-color 0.9s ease-out;
+}
+
+th {
+  background: var(--head);
+  color: var(--muted);
+  font-weight: 400;
+  text-align: center;
+  min-width: 34px;
+}
+
+td.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+td.label {
+  font-weight: 500;
+  white-space: normal;
+  vertical-align: bottom;
+}
+
+/* Long market names clip at the column edge, as Excel shows text beside a filled cell. */
+tbody td:nth-child(3) {
+  max-width: 12.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+td.up {
+  background: var(--up);
+  transition: none;
+}
+
+td.down {
+  background: var(--down);
+  transition: none;
+}
+
+.note {
+  margin: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+dl {
+  margin: 0;
+}
+
+dt {
+  margin-top: 16px;
+}
+
+dt code {
+  white-space: normal;
+  word-break: break-word;
+}
+
+dd {
+  margin: 4px 0 0;
+  color: var(--muted);
+  max-width: 760px;
+}
+
+.functions > p,
+.install p,
+.start p {
+  max-width: 760px;
+}
+
+ol {
+  padding-left: 22px;
+  margin: 0;
+}
+
+footer {
+  margin-top: 44px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+footer p:last-child {
+  display: flex;
+  gap: 18px;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 28px 20px 44px;
+  }
+}
