@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hyperodds for MetaMask: see what a Hyperliquid signature allows</title>
+    <meta
+      name="description"
+      content="A MetaMask Snap that explains Hyperliquid signature requests in plain words before you sign them."
+    />
+    <style>
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-weight: 400;
+        font-display: swap;
+        src: url("/assets/fonts/ibm-plex-mono-regular.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        font-weight: 600;
+        font-display: swap;
+        src: url("/assets/fonts/ibm-plex-mono-semibold.woff2") format("woff2");
+      }
+      :root {
+        --paper: #f5f5f1;
+        --surface: #fff;
+        --ink: #252a23;
+        --muted: #5c5855;
+        --line: #e3e3e0;
+        --button: #111;
+        --button-ink: #fff;
+        --bad: #a33a2b;
+        --good: #176646;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #070b0c;
+          --surface: #10191b;
+          --ink: #e8efec;
+          --muted: #9aaca7;
+          --line: #243436;
+          --button: #e8efec;
+          --button-ink: #070b0c;
+          --bad: #f09a8c;
+          --good: #b8d3c9;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font: 15px/1.6 "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 56px 24px 72px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 56px;
+        align-items: start;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        margin-bottom: 40px;
+      }
+      .brand svg {
+        width: 28px;
+        height: 28px;
+      }
+      h1 {
+        font-size: 30px;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+        margin: 0 0 20px;
+      }
+      p {
+        margin: 0 0 16px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 999px;
+        background: var(--button);
+        color: var(--button-ink);
+        font: inherit;
+        font-weight: 600;
+        padding: 12px 24px;
+        margin: 12px 0 10px;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      #status {
+        min-height: 1.6em;
+        font-size: 13px;
+      }
+      #status.bad {
+        color: var(--bad);
+      }
+      #status.good {
+        color: var(--good);
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 32px 0 0;
+        border-top: 1px solid var(--line);
+      }
+      li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+      }
+      li strong {
+        display: block;
+        font-size: 14px;
+      }
+      figure {
+        margin: 0;
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+      }
+      figcaption {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+      footer {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 24px 48px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      a {
+        color: inherit;
+      }
+      @media (max-width: 820px) {
+        main {
+          grid-template-columns: 1fr;
+          gap: 40px;
+          padding-top: 32px;
+        }
+        h1 {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <div class="brand">
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+              <path d="M22 12 8 40l14 28 18-12 18 12 14-28-14-28-18 12Z" />
+              <path d="m22 12 4 28-4 28m36-56-4 28 4 28M8 40h64M40 24v32" />
+            </g>
+          </svg>
+          Hyperodds for MetaMask
+        </div>
+        <h1>See what a Hyperliquid signature allows before you sign it.</h1>
+        <p>
+          When a site asks MetaMask to sign a Hyperliquid request, this Snap adds a short panel to it:
+          what the signature allows, how long that lasts, the amounts and addresses involved, and a
+          risk level.
+        </p>
+        <p class="muted">
+          It covers API wallet and builder fee approvals, sends, withdrawals, transfers between your
+          balances, staking and multi-sig changes.
+        </p>
+        <button id="install" type="button" disabled>Add to MetaMask</button>
+        <div id="status" role="status" aria-live="polite">Looking for MetaMask…</div>
+        <ul>
+          <li>
+            <strong>Decoded on your device</strong>
+            The Snap has no network access and stores nothing.
+          </li>
+          <li>
+            <strong>Two permissions</strong>
+            MetaMask asks you to allow both: show a panel on signature requests, and see which site
+            sent each one.
+          </li>
+          <li>
+            <strong>You still decide</strong>
+            It never blocks a request. Orders and cancels are signed as a hash, and the panel says when
+            it can't show the details.
+          </li>
+        </ul>
+      </section>
+      <figure>
+        <img
+          src="preview.png"
+          width="766"
+          height="490"
+          alt="MetaMask showing a Hyperliquid API wallet approval with the Hyperodds panel: the key, its name, when it expires and what it replaces."
+        />
+        <figcaption>
+          The Hyperodds console's API wallet approval in MetaMask 13.57. MetaMask lists the raw fields;
+          the panel says what they mean.
+        </figcaption>
+      </figure>
+    </main>
+    <footer>
+      MetaMask browser extension only. The Snap is not listed in the MetaMask Snaps directory; it
+      installs from npm as <code>@hyperodds/snap</code>.
+      Hyperliquid and MetaMask are named to describe compatibility; Hyperodds is not affiliated with
+      either.
+    </footer>
+    <script>
+      const SNAP_ID = "npm:@hyperodds/snap";
+      // The exact published version, so a later upload to npm can't be installed from this page unseen.
+      const VERSION = "0.1.0";
+      const button = document.getElementById("install");
+      const status = document.getElementById("status");
+      let provider = null;
+
+      function say(text, tone = "") {
+        status.textContent = text;
+        status.className = tone;
+      }
+
+      function findMetaMask() {
+        return new Promise((resolve) => {
+          const found = [];
+          const listen = (event) => found.push(event.detail);
+          window.addEventListener("eip6963:announceProvider", listen);
+          window.dispatchEvent(new Event("eip6963:requestProvider"));
+          setTimeout(() => {
+            window.removeEventListener("eip6963:announceProvider", listen);
+            const metamask = found.find((d) => d.info?.rdns?.startsWith("io.metamask"));
+            resolve(metamask?.provider ?? (window.ethereum?.isMetaMask ? window.ethereum : null));
+          }, 400);
+        });
+      }
+
+      async function installed() {
+        const snaps = await provider.request({ method: "wallet_getSnaps" });
+        return snaps?.[SNAP_ID] ?? null;
+      }
+
+      function showInstalled(snap) {
+        button.textContent = "Added to MetaMask";
+        button.disabled = true;
+        say(`Version ${snap.version} is on. Hyperliquid requests now show the panel.`, "good");
+      }
+
+      button.addEventListener("click", async () => {
+        button.disabled = true;
+        say("Confirm in MetaMask…");
+        try {
+          const result = await provider.request({
+            method: "wallet_requestSnaps",
+            params: { [SNAP_ID]: { version: VERSION } },
+          });
+          showInstalled(result[SNAP_ID]);
+        } catch (error) {
+          button.disabled = false;
+          if (error?.code === 4001) say("Not added. The request was closed in MetaMask.", "bad");
+          else say(`MetaMask couldn't add the Snap: ${error?.message ?? error}`, "bad");
+        }
+      });
+
+      (async () => {
+        provider = await findMetaMask();
+        if (!provider) {
+          say("MetaMask isn't installed in this browser. Install it from metamask.io, then reload.", "bad");
+          return;
+        }
+        try {
+          const snap = await installed();
+          if (snap) return showInstalled(snap);
+          button.disabled = false;
+          say("");
+        } catch {
+          say("This MetaMask can't run Snaps. Update it, or use the MetaMask browser extension.", "bad");
+        }
+      })();
+    </script>
+  </body>
+</html>
