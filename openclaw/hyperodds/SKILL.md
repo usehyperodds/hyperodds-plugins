@@ -90,7 +90,7 @@ arguments instead of running the script. The server's forecast tools come with t
   because the surface prices every strike. Don't report that as a contradiction.
 - `status` is `open`, `live` (the event has started and still trades) or `awaiting` (past its
   time, trading until the deployer settles).
-- `volume24h` counts shares. A share pays $1 if its side wins.
+- `volume24h` counts contracts. A contract pays $1 if its side wins.
 - A `clusterId` means two or more deployers list the same question. Run `cluster` before comparing
   their prices. `SAME` means no rule difference was found, though members can still settle through
   different deployers. `CLOSE` and `DIFFERENT` members list their rule differences in `diffs`, and

@@ -5,7 +5,7 @@ hosts. Each one reads from the hosted Hyperodds MCP server.
 - A host it does not install in, a skill that misreads a field, or a gap in these docs: open an
   issue or a pull request here.
 - A tool's output, a missing field or a new tool: open an issue. Those changes ship on the hosted
-  server, with no change here.
+  server (`/mcp`, and the public API under `/trpc`), with no change here.
 
 ## Set up
 

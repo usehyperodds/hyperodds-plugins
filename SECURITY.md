@@ -14,7 +14,8 @@ unless you would rather we did not.
 ## Scope
 
 - The skills, plugins, extensions and scripts in this repository.
-- The hosted MCP endpoint they talk to, `https://api.usehyperodds.com/mcp`.
+- The hosted endpoints they talk to: `https://api.usehyperodds.com/mcp` and the public API under
+  `https://api.usehyperodds.com/trpc`.
 
 Report problems in the console at usehyperodds.com the same way. Issues in OpenClaw, ClawHub,
 Claude Code, Codex, Gemini CLI, Hyperliquid or other third parties belong with them.
