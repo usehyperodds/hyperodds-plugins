@@ -45,6 +45,7 @@ export interface Market {
   subcategory: string | null;
   eventTime: number | null;
   deadline: number | null;
+  timing?: { settles: number | null; starts: number | null; by: number | null } | null;
   listedAt: number | null;
   status: Status;
   settledSide: Side | null;

@@ -2,7 +2,7 @@ import { Action, ActionPanel, Color, Icon, Keyboard, List } from "@raycast/api";
 import { showFailureToast, useCachedPromise, useCachedState } from "@raycast/utils";
 import { Fragment, type RefObject, useEffect, useRef } from "react";
 import { type Market, marketUrl, REFRESH_MS, retryDelay, SITE } from "./lib/api.ts";
-import { accessories, detailGroups, type Tone } from "./lib/format.ts";
+import { accessories, detailGroups, plainMarkdown, type Tone } from "./lib/format.ts";
 import { MENU_BAR } from "./pins.ts";
 
 const CATEGORY_ICON: Record<string, Icon> = {
@@ -81,7 +81,7 @@ export function LoadError({ error, retry }: { error: Error; retry: () => void })
 function MarketDetail({ market }: { market: Market }) {
   return (
     <List.Item.Detail
-      markdown={`### ${market.title}`}
+      markdown={`### ${plainMarkdown(market.title)}`}
       metadata={
         <List.Item.Detail.Metadata>
           {detailGroups(market).map((rows, i) => (

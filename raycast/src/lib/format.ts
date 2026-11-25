@@ -147,10 +147,12 @@ export interface Timing {
   by: number | null;
 }
 
-// The console's rule (settleTiming in @hyperodds/core): a price market settles at its price time, or
-// by its deadline when that differs (a touch); any other market starts, or for a rate decision
-// decides, at its event time and settles by its deadline.
-export function timing(m: Pick<Market, "kind" | "eventTime" | "deadline">): Timing {
+// The API sends each market's times as the console reads them (`timing`), which stays right when a
+// new kind of market appears. Without it, the console's rule (settleTiming in @hyperodds/core): a
+// price market settles at its price time, or by its deadline when that differs (a touch); any other
+// market starts, or for a rate decision decides, at its event time and settles by its deadline.
+export function timing(m: Pick<Market, "kind" | "eventTime" | "deadline" | "timing">): Timing {
+  if (m.timing) return m.timing;
   if (!PRICE_KINDS.has(m.kind)) return { settles: null, starts: m.eventTime, by: m.deadline };
   if (m.eventTime !== null && (m.deadline === null || m.deadline === m.eventTime))
     return { settles: m.eventTime, starts: null, by: null };
@@ -183,6 +185,17 @@ function yesNo(m: Market): boolean {
 
 function clip(text: string, max = NAME_LENGTH): string {
   return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`;
+}
+
+// A title is the deployer's text and the detail pane renders Markdown, so the title is made plain:
+// no image, link, heading, HTML or formula of its own. Brackets stay as they are, because Raycast
+// reads `\(` and `\[` as the start of a formula; a link is broken between its `]` and `(` instead.
+export function plainMarkdown(text: string): string {
+  return text
+    .replace(/\s+/g, " ")
+    .replace(/[\\`*_#!<>|~&${}]/g, "\\$&")
+    .replace(/\]\(/g, "]\u200b(")
+    .replace(/:\/\//g, ":\u200b//");
 }
 
 // A name short enough for the menu bar: the side's own name ("CAR"), a question's outcome
