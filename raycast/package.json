@@ -1,0 +1,106 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "hyperodds",
+  "title": "Hyperodds",
+  "description": "Search Hyperliquid HIP-4 markets with Hyperodds fair lines and edges after fees, and pin the prices you follow to the menu bar.",
+  "icon": "icon.png",
+  "author": "hyperodds",
+  "license": "MIT",
+  "categories": [
+    "Finance",
+    "Data"
+  ],
+  "platforms": [
+    "macOS"
+  ],
+  "keywords": [
+    "hip-4",
+    "hyperliquid",
+    "prediction markets",
+    "outcome markets",
+    "odds",
+    "edges",
+    "fair line"
+  ],
+  "commands": [
+    {
+      "name": "search-markets",
+      "title": "Search Markets",
+      "subtitle": "Hyperodds",
+      "description": "Find a HIP-4 market by name, ticker, team or link and see its prices, fair line, edge after fees and settlement time.",
+      "mode": "view"
+    },
+    {
+      "name": "top-edges",
+      "title": "Top Edges",
+      "subtitle": "Hyperodds",
+      "description": "The HIP-4 markets priced furthest below their fair lines right now, measured on a $100 buy after every fee.",
+      "mode": "view"
+    },
+    {
+      "name": "new-listings",
+      "title": "New Listings",
+      "subtitle": "Hyperodds",
+      "description": "HIP-4 markets from every deployer, newest first, with their prices and fair lines.",
+      "mode": "view"
+    },
+    {
+      "name": "pinned-prices",
+      "title": "Pinned Prices",
+      "subtitle": "Hyperodds",
+      "description": "Keeps the prices of the markets you pin in the macOS menu bar, refreshed about once a minute.",
+      "mode": "menu-bar",
+      "interval": "1m",
+      "preferences": [
+        {
+          "name": "title",
+          "title": "Menu Bar Shows",
+          "description": "What the menu bar item shows for your first pinned market.",
+          "type": "dropdown",
+          "required": false,
+          "default": "name",
+          "data": [
+            {
+              "title": "Name and Price",
+              "value": "name"
+            },
+            {
+              "title": "Price Only",
+              "value": "price"
+            },
+            {
+              "title": "Icon Only",
+              "value": "icon"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "dependencies": {
+    "@raycast/api": "2.13.1",
+    "@raycast/utils": "2.3.3",
+    "react": "19.3.1"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "2.2.0",
+    "@types/node": "26.6.5",
+    "@types/react": "19.3.0",
+    "eslint": "10.15.0",
+    "prettier": "3.10.1",
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist -o dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"test/*.test.ts\"",
+    "live": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/live.ts",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
