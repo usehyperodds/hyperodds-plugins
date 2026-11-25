@@ -19,7 +19,7 @@ overdue. Times are UTC text, because a custom function can't format its cell as 
 `outcome` is the number at the end of a market's link (`usehyperodds.com/m/<id>`) or the link itself. `side`
 is 0 or `"Yes"` (default), 1 or `"No"`, or a side's own name such as `"BAL"`.
 
-The add-in installs from https://usehyperodds.com/excel/index.html once it's live there, with the steps and
+The add-in installs from https://usehyperodds.com/excel/index.html, with the steps and
 full reference on that page. Office lists it as able to read and change your workbook, the permission Excel
 requires of every add-in with custom functions. The add-in writes each result to the cell that asked for it
 and leaves the rest of the workbook alone. It can't trade or touch an account.
