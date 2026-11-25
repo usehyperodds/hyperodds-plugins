@@ -186,20 +186,24 @@ export function createClient({
   fetch = globalThis.fetch,
   timeoutMs = TIMEOUT_MS,
 }: ClientOptions = {}) {
-  // The timeout covers the whole answer, body included.
+  // The timeout covers the whole answer, body included. The timer is our own: the one behind
+  // AbortSignal.timeout is unref'd on Node 22, so a pending request alone would not hold the process.
   async function get(url: string, signal?: AbortSignal): Promise<{ res: Response; body: unknown }> {
-    const timeout = AbortSignal.timeout(timeoutMs);
+    const timeout = new AbortController();
+    const timer = setTimeout(() => timeout.abort(new DOMException("timed out", "TimeoutError")), timeoutMs);
     try {
       const res = await fetch(url, {
         headers: { accept: "application/json", "user-agent": "hyperodds-raycast" },
-        signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
+        signal: signal ? AbortSignal.any([signal, timeout.signal]) : timeout.signal,
       });
       return { res, body: readJson(await res.text()) };
     } catch (error) {
       if (signal?.aborted) throw error;
-      if (timeout.aborted)
+      if (timeout.signal.aborted)
         throw new ApiError("Hyperodds took too long to answer. Try again.", { cause: error });
       throw new ApiError("Can't reach Hyperodds. Check your connection.", { cause: error });
+    } finally {
+      clearTimeout(timer);
     }
   }
 
