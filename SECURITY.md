@@ -18,4 +18,5 @@ unless you would rather we did not.
   `https://api.usehyperodds.com/trpc`.
 
 Report problems in the console at usehyperodds.com the same way. Issues in OpenClaw, ClawHub,
-Claude Code, Codex, Gemini CLI, Hyperliquid or other third parties belong with them.
+Claude Code, Codex, Gemini CLI, Raycast, Excel, MetaMask, Hyperliquid or other third parties belong
+with them.
