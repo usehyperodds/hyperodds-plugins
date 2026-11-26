@@ -1,5 +1,5 @@
-// Builds dist/, the exact contents of usehyperodds.com/excel/ (apps/web/public/excel/ in the web app).
-// A local build serves the add-in from ADDIN_ORIGIN/excel/ and reads markets from API_ORIGIN:
+// Builds dist/, the exact contents of excel.usehyperodds.com (integrations/excel/ in the web app's repository).
+// A local build serves the add-in from the root of ADDIN_ORIGIN and reads markets from API_ORIGIN:
 //   ADDIN_ORIGIN=http://localhost:3281 API_ORIGIN=http://localhost:3181 npm run build
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -7,7 +7,7 @@ import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promi
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
-const PRODUCTION = { addin: "https://usehyperodds.com", api: "https://api.usehyperodds.com" };
+const PRODUCTION = { addin: "https://excel.usehyperodds.com", api: "https://api.usehyperodds.com" };
 
 function origin(name, fallback) {
   const value = process.env[name];
@@ -23,7 +23,7 @@ const api = origin("API_ORIGIN", PRODUCTION.api);
 const root = new URL("../", import.meta.url);
 const dist = new URL("dist/", root);
 const path = (relative) => fileURLToPath(new URL(relative, root));
-const served = (text) => text.replaceAll(`${PRODUCTION.addin}/excel/`, `${addin}/excel/`);
+const served = (text) => text.replaceAll(`${PRODUCTION.addin}/`, `${addin}/`);
 
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist);
@@ -82,4 +82,4 @@ async function list(dir, prefix = "") {
   }
 }
 await list(dist);
-if (addin !== PRODUCTION.addin || api !== PRODUCTION.api) console.log(`add-in ${addin}/excel/, API ${api}`);
+if (addin !== PRODUCTION.addin || api !== PRODUCTION.api) console.log(`add-in ${addin}/, API ${api}`);

@@ -21,9 +21,9 @@ await mkdir(out, { recursive: true });
 const here = pathToFileURL(`${out.replace(/[\\/]$/, "")}/`);
 const file = (name) => fileURLToPath(new URL(name, here));
 const dist = new URL("../dist/", import.meta.url);
-const addin = process.env.ADDIN_ORIGIN?.replace(/\/$/, "") ?? "https://usehyperodds.com";
+const addin = process.env.ADDIN_ORIGIN?.replace(/\/$/, "") ?? "https://excel.usehyperodds.com";
 const api = process.env.API_ORIGIN?.replace(/\/$/, "") ?? "https://api.usehyperodds.com";
-const pageUrl = `${addin}/excel/index.html`;
+const pageUrl = `${addin}/index.html`;
 const seconds = Number(process.argv[2] ?? 30);
 const viewport = { width: 1440, height: 900 };
 const TYPES = {
@@ -62,8 +62,8 @@ window.CustomFunctions = {
 };`;
 
 async function serve(context, { stubOffice }) {
-  await context.route(`${addin}/excel/**`, async (route) => {
-    const name = new URL(route.request().url()).pathname.replace(/^\/excel\//, "");
+  await context.route(`${addin}/**`, async (route) => {
+    const name = new URL(route.request().url()).pathname.slice(1);
     try {
       route.fulfill({ body: await readFile(new URL(name, dist)), contentType: TYPES[name.split(".").pop()] });
     } catch {

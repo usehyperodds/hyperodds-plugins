@@ -265,7 +265,7 @@ function stream(invocation, outcome, read) {
 /**
  * Live price of one side of a HIP-4 market, in cents from 0 to 100. Updates as the book moves; a settled market shows 100 for the side that won and 0 for the other.
  * @customfunction PRICE
- * @helpurl https://usehyperodds.com/excel/index.html#price
+ * @helpurl https://excel.usehyperodds.com/index.html#price
  * @param {any} outcome Outcome id (the number at the end of a market's link) or the link itself.
  * @param {any} [side] 0 or "Yes" (the default), 1 or "No", or the side's name.
  * @param {string} [quote] "mid" (the default), "bid", "ask" or "last".
@@ -285,7 +285,7 @@ export function price(outcome, side, quote, invocation) {
 /**
  * Hyperodds fair line for one side of a HIP-4 market, in cents: its estimate of the chance that side wins.
  * @customfunction FAIR
- * @helpurl https://usehyperodds.com/excel/index.html#fair
+ * @helpurl https://excel.usehyperodds.com/index.html#fair
  * @param {any} outcome Outcome id (the number at the end of a market's link) or the link itself.
  * @param {any} [side] 0 or "Yes" (the default), 1 or "No", or the side's name.
  * @param {CustomFunctions.StreamingInvocation<number>} invocation
@@ -300,7 +300,7 @@ export function fair(outcome, side, invocation) {
 /**
  * Edge in points for a $100 buy of one side: the fair line minus the price you'd pay at the ask, fees included. Leave the side out for the better of the two.
  * @customfunction EDGE
- * @helpurl https://usehyperodds.com/excel/index.html#edge
+ * @helpurl https://excel.usehyperodds.com/index.html#edge
  * @param {any} outcome Outcome id (the number at the end of a market's link) or the link itself.
  * @param {any} [side] 0 or "Yes", 1 or "No", or the side's name. Leave it out for the better side.
  * @param {CustomFunctions.StreamingInvocation<number>} invocation
@@ -316,7 +316,7 @@ export function edge(outcome, side, invocation) {
 /**
  * Live table of HIP-4 markets matching a search, busiest first. Its first column holds the outcome ids that PRICE, FAIR and EDGE take.
  * @customfunction MARKET
- * @helpurl https://usehyperodds.com/excel/index.html#market
+ * @helpurl https://excel.usehyperodds.com/index.html#market
  * @param {string} [search] Words to look for, such as "btc", "fed" or "arsenal". Leave it empty for every market.
  * @param {number} [limit] Most rows to show, from 1 to 100. The default is 20.
  * @param {CustomFunctions.StreamingInvocation<any[][]>} invocation

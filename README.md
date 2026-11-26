@@ -101,7 +101,7 @@ command and how to read the numbers.
 
 `=HYPERODDS.PRICE(id)` shows a market's price in cents and updates in the cell as the market moves.
 `FAIR`, `EDGE` and `MARKET` work the same way. The add-in installs from
-https://usehyperodds.com/excel/index.html: download its manifest and upload it in Excel on the web,
+https://excel.usehyperodds.com: download its manifest and upload it in Excel on the web,
 where a free Microsoft account is enough. [excel/README.md](excel/README.md) has the full reference,
 and `excel/` holds the source of the hosted add-in.
 

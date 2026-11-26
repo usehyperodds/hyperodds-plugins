@@ -10,7 +10,7 @@ const STATUS = {
 };
 
 // Where the add-in is served; a local build points this elsewhere (scripts/build.mjs, ADDIN_ORIGIN).
-const HOME = typeof HYPERODDS_ADDIN === "string" ? HYPERODDS_ADDIN : "https://usehyperodds.com";
+const HOME = typeof HYPERODDS_ADDIN === "string" ? HYPERODDS_ADDIN : "https://excel.usehyperodds.com";
 
 function trouble(kind, wait, loaded) {
   if (kind === "offline") {
@@ -100,7 +100,7 @@ export function render(inExcel, feed) {
   preview(document.querySelector("[data-preview]"));
   if (location.origin !== HOME) {
     const elsewhere = document.querySelector("[data-elsewhere]");
-    elsewhere.textContent = `This copy runs from ${location.origin}. The add-in installs once it's live at ${HOME}/excel/.`;
+    elsewhere.textContent = `This copy runs from ${location.origin}. The add-in installs once it's live at ${HOME}/.`;
     elsewhere.hidden = false;
   }
 }

@@ -7,7 +7,7 @@ const root = new URL("../", import.meta.url);
 const dist = new URL("dist/", root);
 const read = (url) => readFile(url, "utf8");
 const skip = !existsSync(new URL("functions.json", dist)) && "run npm run build in excel/ first";
-const BASE = "https://usehyperodds.com/excel/";
+const BASE = "https://excel.usehyperodds.com/";
 
 test("the metadata declares the four streaming functions the script associates", { skip }, async () => {
   const { functions } = JSON.parse(await read(new URL("functions.json", dist)));
@@ -28,9 +28,10 @@ test("the metadata declares the four streaming functions the script associates",
   assert.match(await read(new URL("functions.js", dist)), /associate\("MARKET"/);
 });
 
-test("every URL in the manifest is a file the build puts in usehyperodds.com/excel/", { skip }, async () => {
+test("every Hyperodds URL in the manifest is a file the build puts in dist/", { skip }, async () => {
   const manifest = await read(new URL("manifest.xml", dist));
-  const urls = [...manifest.matchAll(/"(https:\/\/usehyperodds\.com\/[^"]*)"/g)].map(([, url]) => url);
+  const hyperodds = /"(https:\/\/(?:[a-z]+\.)?usehyperodds\.com\/[^"]*)"/g;
+  const urls = [...manifest.matchAll(hyperodds)].map(([, url]) => url);
   assert.ok(urls.length >= 9);
   for (const url of urls) {
     assert.ok(url.startsWith(BASE), url);

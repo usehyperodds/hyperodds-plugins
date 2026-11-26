@@ -19,7 +19,7 @@ overdue. Times are UTC text, because a custom function can't format its cell as 
 `outcome` is the number at the end of a market's link (`usehyperodds.com/m/<id>`) or the link itself. `side`
 is 0 or `"Yes"` (default), 1 or `"No"`, or a side's own name such as `"BAL"`.
 
-The add-in installs from https://usehyperodds.com/excel/index.html, with the steps and
+The add-in installs from https://excel.usehyperodds.com, with the steps and
 full reference on that page. Office lists it as able to read and change your workbook, the permission Excel
 requires of every add-in with custom functions. The add-in writes each result to the cell that asked for it
 and leaves the rest of the workbook alone. It can't trade or touch an account.
@@ -27,7 +27,7 @@ and leaves the rest of the workbook alone. It can't trade or touch an account.
 ## How it works
 
 An Office add-in with an XML manifest and a shared runtime: the custom functions and the task pane run in
-one page, `index.html`, loaded from `https://usehyperodds.com/excel/`. Every cell in a workbook shares one
+one page, `index.html`, loaded from `https://excel.usehyperodds.com`. Every cell in a workbook shares one
 `live.summaries` stream from `https://api.usehyperodds.com` (server-sent events) and one snapshot of every
 market, taken at once and retaken whenever the stream reconnects. If the stream can't connect, cells
 refresh every 15 seconds instead, waiting longer when the API asks, and the stream is retried with backoff.
@@ -41,7 +41,7 @@ Node.js 22.3 or later.
 
 ```sh
 npm ci
-npm run build          # dist/: the files served at usehyperodds.com/excel/
+npm run build          # dist/: the files served at excel.usehyperodds.com
 npm test               # unit tests with a mocked API and stream, plus checks on dist/
 npm run validate       # Microsoft's manifest validator (sends dist/manifest.xml to Microsoft's service)
 npm run live           # the functions in Node against the live API, printing what each cell gets
@@ -58,9 +58,10 @@ A local build serves the add-in from another origin and reads another API:
 ADDIN_ORIGIN=http://localhost:3281 API_ORIGIN=http://localhost:3181 npm run build
 ```
 
-Serve `dist/` at `/excel/` on that origin (the web app does it from `apps/web/public/excel/`). The API must
-allow the origin: the web app's own origin always is; any other goes in the API's `CORS_ORIGINS`. The build
-gives a local manifest its own id and name, so it never replaces the real add-in in Excel.
+Serve `dist/` at the root of that origin (production serves it from `integrations/excel/` in the web
+app's repository). The API must allow the origin: list it in the API's `READ_ORIGINS`, which lets a page
+read markets without a session. The build gives a local manifest its own id and name, so it never
+replaces the real add-in in Excel.
 
 `npm run check:browser -- 30` runs the browser check for 30 seconds against whatever `ADDIN_ORIGIN` and
 `API_ORIGIN` name (production by default). It writes screenshots, a recording and a log to `OUT`
